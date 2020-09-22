@@ -1,0 +1,53 @@
+{
+  "name": "orcas-phantom-backend",
+  "version": "1.0.0",
+  "description": "Phantom is a web application that allows passengers to track bus location and movements around Kigali",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint ./src --fix",
+    "test": "jest",
+    "coverage": "jest --coverage --colors",
+    "coveralls": "jest --coverage && coveralls < coverage/lcov.info",
+    "dev": "nodemon --exec babel-node ./src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/atlp-rwanda/orcas-phantom-backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/atlp-rwanda/orcas-phantom-backend/issues"
+  },
+  "homepage": "https://github.com/atlp-rwanda/orcas-phantom-backend#readme",
+  "dependencies": {
+    "babel-cli": "^7.0.0-0",
+    "babel-node": "0.0.1-security",
+    "babel-preset-env": "^1.7.0",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jest": "^26.4.2",
+    "pg": "^8.3.3",
+    "pg-hstore": "^2.3.3",
+    "sequelize": "^6.3.5",
+    "sequelize-cli": "^6.2.0",
+    "superagent": "^6.1.0",
+    "supertest": "^4.0.2",
+    "swagger-ui-express": "^4.1.4"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.11.6",
+    "@babel/core": "^7.11.6",
+    "@babel/node": "^7.10.5",
+    "@babel/preset-env": "^7.11.5",
+    "@babel/register": "^7.11.5",
+    "eslint": "^7.9.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.0",
+    "nodemon": "^2.0.4"
+  },
+  "engines": {
+    "node": "14.8.0"
+  }
+}
