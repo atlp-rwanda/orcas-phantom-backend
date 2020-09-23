@@ -1,0 +1,46 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "description": "Phantom is a web application that allows passengers to track bus location and movements around Kigali",
+      "version": "1.0",
+      "title": "Phantom",
+      "termsOfService": "http://swagger.io/terms/",
+      "contact": {
+        "email": "isaackomeza@gmail.com"
+      },
+      "license": {
+        "name": "MIT",
+        "url": "https://github.com/atlp-rwanda/orcas-phantom-backend/README.md"
+      }
+    },
+    "host": "localhost:3000",
+    "basePath": "/",
+    "schemes": ["http", "https"],
+    "paths": {
+        "/": {
+            "get": {
+              "tags": ["Welcome"],
+              "summary": "Get welcoming message",
+              "description": "This endpoint uses get request to accept",
+              "operationId": "",
+              "consumes": ["application/json", "application/xml"],
+              "produces": ["application/xml", "application/json"],
+              "parameters": [
+                {
+                  "in": "body",
+                  "name": "body",
+                  "description": "Welcome to orcas backend",
+                  "required": true
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Successful Operation"
+                }
+              }
+            }
+          }
+
+    }
+}
+  
