@@ -1,2 +1,5 @@
-# orcas-phantom-backend
-Phantom is a web application that allows passengers to track bus location and movements around Kigali
+
+[![Build Status](https://travis-ci.org/atlp-rwanda/orcas-phantom-backend.svg?branch=ch-setup-travisci-coveralls)](https://travis-ci.org/atlp-rwanda/orcas-phantom-backend)
+
+
+
