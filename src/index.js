@@ -1,7 +1,9 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import Sequelize from 'sequelize';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from '../swagger.json';
+import DBconfig from '../database/config/config';
 
 const app = express();
 
@@ -22,5 +24,10 @@ app.use((req, res) => {
   error.status = 404;
   res.send({ status: error.status, message: error.message });
 });
+// test db
+const db = new Sequelize(DBconfig.development.url, {
+  dialect: DBconfig.development.dialect
+});
+db.authenticate().then(() => console.log('Database connected...')).catch((err) => console.log(`Error ${err}`));
 
 export default app;
