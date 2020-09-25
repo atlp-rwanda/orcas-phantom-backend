@@ -5,8 +5,6 @@ import swaggerDocument from '../swagger.json';
 
 const app = express();
 
-const port = process.env.PORT || 3000;
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
@@ -24,7 +22,5 @@ app.use(async (req, res) => {
   error.status = 404;
   res.send({ status: error.status, message: error.message });
 });
-
-app.listen(port, console.log(`server has started on port ${port}`));
 
 export default app;
