@@ -2,8 +2,8 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import Sequelize from 'sequelize';
 import swaggerUi from 'swagger-ui-express';
+import DBconfig from './database/config/config';
 import swaggerDocument from '../swagger.json';
-import DBconfig from '../database/config/config';
 
 const app = express();
 

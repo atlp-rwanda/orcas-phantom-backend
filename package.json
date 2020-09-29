@@ -4,9 +4,11 @@
   "description": "Phantom is a web application that allows passengers to track bus location and movements around Kigali",
   "main": "index.js",
   "scripts": {
+    "start": "node ./build/index.js",
+    "dev": "nodemon --exec babel-node ./src/index.js",
+    "build": "babel ./src -d build",
     "lint": "eslint ./src --fix",
-    "test": "jest",
-    "dev": "nodemon --exec babel-node ./src/server.js"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
