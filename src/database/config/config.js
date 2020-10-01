@@ -1,6 +1,5 @@
-import dotenv from 'dotenv';
+require('dotenv').config();
 
-dotenv.config();
 module.exports = {
   development: {
     url: process.env.DEV_DATABASE_URL,
