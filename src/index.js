@@ -5,6 +5,8 @@ import routes from './routes/routes';
 
 const busRoutes = require('./routes/busRoutes');
 
+const busstopRoutes = require('./routes/busStop.route');
+
 const app = express();
 
 app.use(express.json());
@@ -17,6 +19,7 @@ app.get('/', (req, res) => res.status(200).json({
 app.use('/', busRoutes);
 
 app.use('/routes', routes);
+app.use('/', busstopRoutes);
 
 app.use((req, res) => {
   const error = new Error('Incorrect route! try again');
