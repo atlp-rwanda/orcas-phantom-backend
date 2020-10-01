@@ -2,6 +2,8 @@ import express from 'express';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from '../swagger.json';
 
+const routes = require('./routes/busRoutes');
+
 const app = express();
 
 app.use(express.json());
@@ -11,6 +13,7 @@ app.use('/swaggerDocument', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.get('/', (req, res) => res.status(200).json({
   message: 'Welcome to gunners-phanthom backend site',
 }));
+app.use('/', routes);
 
 app.use((req, res) => {
   const error = new Error('Not found');
