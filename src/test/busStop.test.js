@@ -12,24 +12,25 @@ describe('POST BusStop', () => {
     const res = await request(app)
       .post('/busstop')
       .send({
-        busStopName: 2,
-        currentLocation: 'Remera',
-        bus_status: 'inactive'
+        busStopName: Kinamba,
+        coordinate: 1345678.456738,
+        sector: Gisozi,
+        district: Gasabo
       });
     expect(res.statusCode).toEqual(201);
-    expect(res.body).toHaveProperty('bus');
+    expect(res.body).toHaveProperty('busstop');
   });
 
-  it('should get a single bus', async () => {
-    const busId = 1;
-    const res = await request(app).get(`/buses/${busId}`);
+  it('should get a single busstop', async () => {
+    const busStopId = 1;
+    const res = await request(app).get(`/busstop/${busStopId}`);
     expect(res.statusCode).toEqual(200);
     expect(res.body).toHaveProperty('bus');
   });
 
-  it('should get all buses', async () => {
-    const res = await request(app).get('/buses');
+  it('should get all busStops', async () => {
+    const res = await request(app).get('/busstop');
     expect(res.statusCode).toEqual(200);
-    expect(res.body).toHaveProperty('buses');
+    expect(res.body).toHaveProperty('busstop');
   });
 });

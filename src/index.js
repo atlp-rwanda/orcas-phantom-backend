@@ -2,7 +2,7 @@ import express from 'express';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from '../swagger.json';
 
-const routes = require('./routes/busRoutes');
+const routes = require('./routes/busStop.route');
 
 const app = express();
 

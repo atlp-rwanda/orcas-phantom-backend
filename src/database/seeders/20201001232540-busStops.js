@@ -22,7 +22,7 @@ module.exports = {
     {},
   ),
 
-  down: (queryInterface,) => queryInterface.bulkDelete('busStop', null, {}),
+  down: (queryInterface,) => queryInterface.bulkDelete('busStops', null, {}),
 };
 
 // database/seeds/xxxx-busStops.js

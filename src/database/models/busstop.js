@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const busStop = sequelize.define('busStop', {
+  const busStop = sequelize.define('busStops', {
     busStopName: DataTypes.STRING,
     coordinate: DataTypes.STRING,
     sector: DataTypes.STRING,
