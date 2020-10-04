@@ -2,13 +2,10 @@ import express from 'express';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from '../swagger.json';
 import routes from './routes/routes';
-import users from './routes/users';
 
 const app = express();
 
 app.use(express.json());
-
-app.use('/api', users);
 
 app.use('/swaggerDocument', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 

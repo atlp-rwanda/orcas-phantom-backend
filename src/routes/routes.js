@@ -1,13 +1,19 @@
 import express from 'express';
-import Routes from '../database/models/Routes_model';
+import { validateRouteInput, validateUpdateRouteInput } from '../middlewares/route.validator';
+import {
+  getAllRoutes,
+  addRoute,
+  getSpecificRoute,
+  deleteSpecificRoute,
+  updateSpecificRoute
+} from '../controller/routeController';
 
 const router = express.Router();
 
-router.get('/', (req, res) => Routes.findAll()
-  .then((routes) => {
-    console.log(routes);
-    res.sendStatus(200);
-  })
-  .catch((err) => console.log(err)));
+router.get('/', getAllRoutes);
+router.get('/:id', getSpecificRoute);
+router.post('/', [validateRouteInput], addRoute);
+router.delete('/:id', deleteSpecificRoute);
+router.patch('/:id', [validateUpdateRouteInput], updateSpecificRoute);
 
 export default router;
