@@ -11,7 +11,7 @@
     "migrate:reset": "npx sequelize-cli db:migrate:undo:all && npm run migrate",
     "test": "cross-env NODE_ENV=test jest --testTimeout=10000",
     "pretest": "cross-env NODE_ENV=test npm run migrate:reset",
-    "coverage": "npm run pretest && jest --coverage && cat ./coverage/lcov.info | coveralls"
+    "coverage": "npm run pretest && jest --detectOpenHandles --coverage && cat ./coverage/lcov.info | coveralls"
   },
   "repository": {
     "type": "git",
@@ -35,8 +35,10 @@
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.1.0",
     "babel-node": "0.0.1-security",
+    "coveralls": "^3.1.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-validator": "^6.6.1",
     "jest": "^26.4.2",
     "pg": "^8.3.3",
     "pg-hstore": "^2.3.3",
