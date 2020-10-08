@@ -1,0 +1,16 @@
+version: "3"
+services:
+    db:
+        image: "postgres"
+        container_name: "phantom"
+        environment:
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=pgAdmin
+            - POSTGRES_DB=phantomdb
+        ports:
+            - "3000:3000"
+        volumes:
+            - postgresql-volume:/var/lib/postgresql/data
+volumes: 
+    postgresql-volume:
+        external: true
