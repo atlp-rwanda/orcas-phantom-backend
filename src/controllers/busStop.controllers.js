@@ -1,3 +1,4 @@
+import Sequelize from 'sequelize';
 import models from '../database/models';
 
 const createBusStop = (req, res) => {
@@ -7,7 +8,12 @@ const createBusStop = (req, res) => {
     sector: req.body.sector,
     district: req.body.district
   };
-  models.busStops.findOne({ where: { busStopName: req.body.busStopName } })
+  models.busStops.findOne(
+    {
+      where:
+      Sequelize.or({ busStopName: req.body.busStopName }, { coordinate: req.body.coordinate })
+    }
+  )
     .then((busstopFound) => {
       if (busstopFound) return res.status(409).json({ status: 409, message: 'Bus Stop already Exist' });
       models.busStops.create(bust)

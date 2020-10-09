@@ -5,5 +5,6 @@ module.exports = (sequelize, DataTypes) => {
     destinationID: DataTypes.INTEGER,
     busStops: DataTypes.ARRAY(DataTypes.INTEGER)
   }, {});
+
   return Route;
 };
