@@ -1,12 +1,15 @@
 import express from 'express';
 import {
-  getAllUsers, signup, getSpecificUser, updateSpecificUser, deleteSpecificUser
+  getAllUsers, signup, login, getSpecificUser, updateSpecificUser, deleteSpecificUser
 } from '../controllers/users';
-import { userSignupInput, userUpdateInput } from '../middleware/user.validation';
+import { userSignupInput, userUpdateInput, userLoginInput } from '../middleware/user.validation';
+import verifyAdminToken from '../middleware/verifyAuthToken';
 
 const users = express.Router();
 
-users.post('/signup', [userSignupInput], signup);
+users.post('/signup', [verifyAdminToken, userSignupInput], signup);
+
+users.post('/login', [userLoginInput], login);
 
 users.get('/users', getAllUsers);
 

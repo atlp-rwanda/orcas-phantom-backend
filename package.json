@@ -43,6 +43,7 @@
     "express": "^4.17.1",
     "express-validator": "^6.6.1",
     "jest": "^26.4.2",
+    "jsonwebtoken": "^8.5.1",
     "pg": "^8.3.3",
     "pg-hstore": "^2.3.3",
     "sequelize": "^5.22.3",

@@ -1,4 +1,4 @@
-import { signupInput, UpdateInput } from '../helper/user.input';
+import { signupInput, UpdateInput, loginInput } from '../helper/user.input';
 
 const userSignupInput = (req, res, next) => {
   const { error } = signupInput(req);
@@ -16,4 +16,12 @@ const userUpdateInput = (req, res, next) => {
   }
   next();
 };
-export { userSignupInput, userUpdateInput };
+
+const userLoginInput = (req, res, next) => {
+  const { error } = loginInput(req);
+  if (error) {
+    res.status(400).json({ status: res.statusCode, error: error.details[0].message });
+  }
+  next();
+};
+export { userSignupInput, userUpdateInput, userLoginInput };
