@@ -2,6 +2,7 @@ import express from 'express';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from '../swagger.json';
 import routes from './routes/routes';
+import users from './routes/users';
 
 const busRoutes = require('./routes/busRoutes');
 
@@ -17,6 +18,8 @@ app.get('/', (req, res) => res.status(200).json({
 app.use('/', busRoutes);
 
 app.use('/routes', routes);
+
+app.use('/api', users);
 
 app.use((req, res) => {
   const error = new Error('Incorrect route! try again');
