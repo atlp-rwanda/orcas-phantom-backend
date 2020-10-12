@@ -1,12 +1,12 @@
 import express from 'express';
-import { validateRouteInput, validateUpdateRouteInput } from '../middleware/route.validator';
+import { validateRouteInput, validateUpdateRouteInput } from '../middleware/route.validation';
 import {
   getAllRoutes,
   addRoute,
   getSpecificRoute,
   deleteSpecificRoute,
   updateSpecificRoute
-} from '../controllers/routeController';
+} from '../controllers/routes.controller';
 
 const router = express.Router();
 
