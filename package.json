@@ -11,7 +11,9 @@
     "migrate:reset": "npx sequelize-cli db:migrate:undo:all && npm run migrate",
     "test": "cross-env NODE_ENV=test jest --testTimeout=10000",
     "pretest": "cross-env NODE_ENV=test npm run migrate:reset",
-    "coverage": "npm run pretest && jest --detectOpenHandles --coverage && cat ./coverage/lcov.info | coveralls"
+    "coverage": "npm run pretest && jest --detectOpenHandles --coverage && cat ./coverage/lcov.info | coveralls",
+    "drop:db": "cross-env NODE_ENV=test node_modules/.bin/sequelize db:drop phantom_test",
+    "create:db": "cross-env NODE_ENV=test node_modules/.bin/sequelize db:create phantom_test"
   },
   "repository": {
     "type": "git",
@@ -35,6 +37,7 @@
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.1.0",
     "babel-node": "0.0.1-security",
+    "bcryptjs": "^2.4.3",
     "coveralls": "^3.1.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
@@ -42,7 +45,7 @@
     "jest": "^26.4.2",
     "pg": "^8.3.3",
     "pg-hstore": "^2.3.3",
-    "sequelize": "^6.3.5",
+    "sequelize": "^5.22.3",
     "sequelize-cli": "^6.2.0",
     "superagent": "^6.1.0",
     "swagger-ui-express": "^4.1.4"
