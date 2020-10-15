@@ -6,8 +6,8 @@ describe('BusStop Endpoints', () => {
     const res = await request(app)
       .post('/busstop')
       .send({
-        busStopName: 'Kinamba',
-        coordinate: '1234566.456789',
+        busStopName: 'Kabeza',
+        coordinate: '1234547.456789',
         sector: 'gisozi',
         district: 'gasabo',
       });
@@ -55,7 +55,7 @@ describe('GET BusStops', () => {
 describe('UPDATE single BusStop', () => {
   it('should update a single Busstop', async (done) => {
     const resp = await request(app).get('/busstop');
-    const busStopID = resp.body[resp.body.length - 1].id;
+    const busStopID = resp.body[0].id;
     const res = await request(app).patch(`/busstop/${busStopID}`)
       .send({
         busStopName: 'Kinamba',
@@ -75,7 +75,7 @@ describe('UPDATE single BusStop', () => {
 describe('DELETE single busstop', () => {
   it('should delete single busstop', async (done) => {
     const resp = await request(app).get('/busstop');
-    const busStopID = resp.body[resp.body.length - 1].id;
+    const busStopID = resp.body[0].id;
     const res = await request(app).delete(`/busstop/${busStopID}`);
     expect(res.statusCode).toEqual(200);
     done();

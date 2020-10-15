@@ -27,14 +27,35 @@ describe('Wrong route', () => {
 });
 
 describe('POST', () => {
+  const bs3 = {
+    busStopName: 'Kagara',
+    coordinate: '1234566.456709',
+    sector: 'kanombe',
+    district: 'Kicukiro'
+  };
+  const bs4 = {
+    busStopName: 'St jose',
+    coordinate: '1234506.459789',
+    sector: 'kanombe',
+    district: 'Kicukiro'
+  };
+
+  beforeEach(async () => {
+    await request(app)
+      .post('/busstop')
+      .send(bs3);
+    await request(app)
+      .post('/busstop')
+      .send(bs4);
+  });
   it('should create a new route', async (done) => {
     const res = await request(app)
       .post('/routes')
       .send({
         name: 'Gatsata-Nyabugogo',
-        origin: 6,
-        destination: 9,
-        busStops: [7, 9]
+        origin: 1,
+        destination: 2,
+        busStops: [1, 2]
       });
     expect(res.status).toEqual(201);
     done();

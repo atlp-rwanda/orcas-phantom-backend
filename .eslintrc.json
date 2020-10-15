@@ -8,6 +8,7 @@
   },
   "rules": {
     "eqeqeq":0,
+    //"max-len": ["error", { "code": 80 }],
     "linebreak-style":0,
     "no-console":0,
     "no-undef":0,  

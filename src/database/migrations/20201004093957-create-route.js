@@ -11,10 +11,20 @@ module.exports = {
         type: Sequelize.STRING
       },
       originID: {
-        type: Sequelize.INTEGER
+        onDelete: 'CASCADE',
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'busStops',
+          key: 'id'
+        }
       },
       destinationID: {
-        type: Sequelize.INTEGER
+        onDelete: 'CASCADE',
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'busStops',
+          key: 'id'
+        }
       },
       busStops: {
         type: Sequelize.ARRAY(Sequelize.INTEGER)

@@ -8,8 +8,6 @@ const busRoutes = require('./routes/bus.route');
 
 const busstopRoutes = require('./routes/busStop.route');
 
-const busstopRoutes = require('./routes/busStop.route');
-
 const app = express();
 
 app.use(express.json());

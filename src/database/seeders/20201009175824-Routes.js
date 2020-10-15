@@ -4,8 +4,8 @@ module.exports = {
     [
       {
         name: 'Remera - Town',
-        originID: 7,
-        destinationID: 9,
+        originID: 1,
+        destinationID: 2,
         busStops: [5, 6, 9],
         createdAt: new Date(),
         updatedAt: new Date(),

@@ -1,29 +1,96 @@
+import Sequelize from 'sequelize';
 import model from '../database/models';
 
-export const addRoute = (req, res) => {
+export const addRoute = async (req, res) => {
   const rt = {
     name: req.body.name,
     originID: req.body.origin,
     destinationID: req.body.destination,
     busStops: req.body.busStops
   };
-
-  model.Route.findOne({ where: { name: req.body.name } })
-    .then((rout) => {
-      if (rout) return res.status(409).json({ status: 409, message: 'The Route already exist' });
-      model.Route.create(rt)
-        .then((data) => {
-          res.status(201).json({ status: 201, message: 'Route created successfully', data });
-        })
-        .catch((err) => res.status(500).json({ status: 404, message: err }));
-    })
-    .catch((err) => res.status(500).json({ status: 404, message: err }));
+  try {
+    const existRoute = await model.Route.findOne(
+      {
+        where: { name: req.body.name }
+      }
+    );
+    if (existRoute) {
+      return res.status(409).json(
+        {
+          status: 409,
+          message: `The Route with name ${req.body.name} already exist`
+        }
+      );
+    }
+    const checkOrigin = await model.busStops.findByPk(rt.originID);
+    if (!checkOrigin) {
+      return res.status(404).json(
+        { status: 404, message: 'The Bus stop for origin does not exist' }
+      );
+    }
+    const checkDestination = await model.busStops.findByPk(
+      req.body.destination
+    );
+    if (!checkDestination) {
+      return res.status(404).json(
+        { status: 404, message: 'The Bus stop for destination does not exist' }
+      );
+    }
+    if (rt.originID != rt.busStops[0]
+      || rt.destinationID != rt.busStops[rt.busStops.length - 1]
+    ) {
+      return res.status(409).json(
+        {
+          status: 409,
+          message: 'Route Origin and destination mismacth their busStop'
+        }
+      );
+    }
+    // check for duplicate bus stops
+    const checkDuplicate = () => {
+      for (let i = 0; i < rt.busStops.length; i += 1) {
+        for (let j = i + 1; j < rt.busStops.length; j += 1) {
+          if (rt.busStops[i] == rt.busStops[j]) {
+            return true;
+          }
+        }
+        return false;
+      }
+    };
+    if (checkDuplicate()) {
+      return res.status(409).json(
+        { status: 409, message: 'You have entered duplicate bus stops' }
+      );
+    }
+    // check if all bus stop exist
+    const { Op } = Sequelize;
+    const result = await model.busStops.count({
+      where: {
+        id: { [Op.in]: rt.busStops }
+      }
+    });
+    if (result != rt.busStops.length) {
+      return res.status(409).json(
+        { status: 409, message: 'One of the bus stop does not exist' }
+      );
+    }
+    const route = await model.Route.create(rt);
+    return res.status(201).json(
+      { status: 201, message: 'The Route created successfully', route }
+    );
+  } catch (error) {
+    return res.status(500).json({ error });
+  }
 };
 
 export const getAllRoutes = (req, res) => {
   model.Route.findAll()
     .then((route) => {
-      if (route.length < 1) return res.status(404).json({ status: 404, message: 'There are no available Routes' });
+      if (route.length < 1) {
+        return res.status(404).json(
+          { status: 404, message: 'There are no available Routes' }
+        );
+      }
       const allRoutes = route.sort((a, b) => (new Date(b.updatedAt)).getTime()
           - (new Date(a.updatedAt).getTime()));
       res.status(200).json(allRoutes);
@@ -50,9 +117,15 @@ export const deleteSpecificRoute = (req, res) => {
     where: { id }
   })
     .then((rt) => {
-      if (rt == 1) return res.status(200).json({ message: 'Route has been deleted successfully.' });
+      if (rt == 1) {
+        return res.status(200).json(
+          { message: 'Route has been deleted successfully.' }
+        );
+      }
 
-      res.status(404).json({ status: 404, message: `Cannot delete route with id = ${id}` });
+      res.status(404).json(
+        { status: 404, message: `Cannot delete route with id = ${id}` }
+      );
     })
     .catch((err) => res.status(500).json({ message: err }));
 };
@@ -64,9 +137,14 @@ export const updateSpecificRoute = (req, res) => {
     where: { id }
   })
     .then((rt) => {
-      if (rt == 1) return res.status(200).json({ message: 'Route updated successfully.' });
-
-      res.status(404).json({ status: 404, message: `Cannot update Route with id = ${id}` });
+      if (rt == 1) {
+        return res.status(200).json(
+          { message: 'Route updated successfully.' }
+        );
+      }
+      res.status(404).json(
+        { status: 404, message: `Cannot update Route with id = ${id}` }
+      );
     })
     .catch((err) => res.status(500).json({ message: err }));
 };
