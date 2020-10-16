@@ -16,6 +16,14 @@ if (config.url) {
     config.database, config.username, config.password, config
   );
 }
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log('Database Connection has been established successfully.');
+  })
+  .catch((err) => {
+    console.error('Unable to connect to the database:', err);
+  });
 
 fs
   .readdirSync(__dirname)
