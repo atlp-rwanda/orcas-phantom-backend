@@ -1,6 +1,28 @@
 import request from 'supertest';
 import app from '../index';
 
+const bs3 = {
+  busStopName: 'Kagara',
+  coordinate: '1234566.456709',
+  sector: 'kanombe',
+  district: 'Kicukiro'
+};
+const bs4 = {
+  busStopName: 'St jose',
+  coordinate: '1234506.459789',
+  sector: 'kanombe',
+  district: 'Kicukiro'
+};
+
+afterAll(async () => {
+  await request(app)
+    .post('/busstop')
+    .send(bs3);
+  await request(app)
+    .post('/busstop')
+    .send(bs4);
+});
+
 describe('BusStop Endpoints', () => {
   it('should create a new bus Stop', async () => {
     const res = await request(app)
@@ -55,7 +77,7 @@ describe('GET BusStops', () => {
 describe('UPDATE single BusStop', () => {
   it('should update a single Busstop', async (done) => {
     const resp = await request(app).get('/busstop');
-    const busStopID = resp.body[0].id;
+    const busStopID = resp.body[resp.body.length - 1].id;
     const res = await request(app).patch(`/busstop/${busStopID}`)
       .send({
         busStopName: 'Kinamba',

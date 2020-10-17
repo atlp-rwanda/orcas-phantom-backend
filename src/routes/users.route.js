@@ -1,19 +1,27 @@
 import express from 'express';
 import {
-  getAllUsers, signup, getSpecificUser, updateSpecificUser, deleteSpecificUser
+  getAllUsers,
+  signup,
+  login, getSpecificUser, updateSpecificUser, deleteSpecificUser
 } from '../controllers/users.controller';
-import { userSignupInput, userUpdateInput } from '../middleware/user.validation';
+import {
+  userSignupInput, userUpdateInput, userLoginInput
+} from '../middleware/user.validation';
+import verifyAdminToken from '../middleware/verifyAuthToken';
 
 const users = express.Router();
 
-users.post('/signup', [userSignupInput], signup);
+users.post('/signup', [verifyAdminToken, userSignupInput], signup);
 
-users.get('/users', getAllUsers);
+users.post('/login', [userLoginInput], login);
 
-users.get('/user/:id', getSpecificUser);
+users.get('/users', [verifyAdminToken], getAllUsers);
 
-users.patch('/user/:id', [userUpdateInput], updateSpecificUser);
+users.get('/users/:id', [verifyAdminToken], getSpecificUser);
 
-users.delete('/user/:id', deleteSpecificUser);
+users.patch('/users/:id',
+  [verifyAdminToken, userUpdateInput], updateSpecificUser);
+
+users.delete('/users/:id', [verifyAdminToken], deleteSpecificUser);
 
 export default users;

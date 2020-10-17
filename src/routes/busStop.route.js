@@ -1,7 +1,9 @@
 import { Router } from 'express';
 
 import controllers from '../controllers/busStop.controllers';
-import { busStopInput, busStopUpdateInput } from '../middleware/busStop.validation';
+import {
+  busStopInput, busStopUpdateInput
+} from '../middleware/busStop.validation';
 
 const router = Router();
 
