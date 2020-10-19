@@ -12,7 +12,9 @@ describe('GET Welcome message', () => {
   it('should get welcome message', async (done) => {
     const res = await request(app).get('/');
     expect(res.status).toEqual(200);
-    expect(res.body.message).toEqual('Welcome to gunners-phanthom backend site');
+    expect(res.body.message).toEqual(
+      'Welcome to gunners-phanthom backend site'
+    );
     done();
   });
 });
@@ -27,14 +29,38 @@ describe('Wrong route', () => {
 });
 
 describe('POST', () => {
+  const bs3 = {
+    busStopName: 'Kagara',
+    coordinate: '1234566.456709',
+    sector: 'kanombe',
+    district: 'Kicukiro'
+  };
+  const bs4 = {
+    busStopName: 'St jose',
+    coordinate: '1234506.459789',
+    sector: 'kanombe',
+    district: 'Kicukiro'
+  };
+
+  beforeEach(async () => {
+    await request(app)
+      .post('/busstop')
+      .send(bs3);
+    await request(app)
+      .post('/busstop')
+      .send(bs4);
+  });
   it('should create a new route', async (done) => {
+    const resp = await request(app).get('/busstop');
+    const id1 = resp.body[0].id;
+    const id2 = resp.body[1].id;
     const res = await request(app)
       .post('/routes')
       .send({
         name: 'Gatsata-Nyabugogo',
-        origin: 6,
-        destination: 9,
-        busStops: [7, 9]
+        origin: id1,
+        destination: id2,
+        busStops: [id1, id2]
       });
     expect(res.status).toEqual(201);
     done();

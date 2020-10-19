@@ -1,5 +1,7 @@
 import express from 'express';
-import { validateRouteInput, validateUpdateRouteInput } from '../middleware/route.validation';
+import {
+  validateRouteInput, validateUpdateRouteInput
+} from '../middleware/route.validation';
 import {
   getAllRoutes,
   addRoute,

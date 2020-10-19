@@ -1,8 +1,12 @@
 import express from 'express';
 import {
-  getAllUsers, signup, login, getSpecificUser, updateSpecificUser, deleteSpecificUser
+  getAllUsers,
+  signup,
+  login, getSpecificUser, updateSpecificUser, deleteSpecificUser
 } from '../controllers/users.controller';
-import { userSignupInput, userUpdateInput, userLoginInput } from '../middleware/user.validation';
+import {
+  userSignupInput, userUpdateInput, userLoginInput
+} from '../middleware/user.validation';
 import verifyAdminToken from '../middleware/verifyAuthToken';
 
 const users = express.Router();
@@ -15,7 +19,8 @@ users.get('/users', [verifyAdminToken], getAllUsers);
 
 users.get('/users/:id', [verifyAdminToken], getSpecificUser);
 
-users.patch('/users/:id', [verifyAdminToken, userUpdateInput], updateSpecificUser);
+users.patch('/users/:id',
+  [verifyAdminToken, userUpdateInput], updateSpecificUser);
 
 users.delete('/users/:id', [verifyAdminToken], deleteSpecificUser);
 

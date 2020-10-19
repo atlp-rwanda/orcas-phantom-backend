@@ -13,10 +13,10 @@ export const routeInput = (req) => {
 
 export const routeUpdateInput = (req) => {
   const schema = Joi.object().keys({
-    name: Joi.string().required().min(6).max(100),
+    name: Joi.string().min(6).max(100),
     origin: Joi.number().integer(),
     destination: Joi.number().integer(),
-    busStops: Joi.array().min(2).items(Joi.number().integer()).required()
+    busStops: Joi.array().min(2).items(Joi.number().integer())
   });
   return schema.validate(req.body);
 };

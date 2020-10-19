@@ -8,7 +8,9 @@ const busInput = (req) => {
     currentLocation: Joi.string().required().custom((value, helper) => {
       const coordinates = req.body.currentLocation.split(',');
       if (!req.body.currentLocation.includes(',')) {
-        return helper.message('Latitude and Longitude must be separated by comma');
+        return helper.message(
+          'Latitude and Longitude must be separated by comma'
+        );
       }
       const lat = coordinates[0].trim();
       const long = coordinates[1].trim();
@@ -35,7 +37,9 @@ const busUpdateInput = (req) => {
     currentLocation: Joi.string().custom((value, helper) => {
       const coordinates = req.body.currentLocation.split(',');
       if (!req.body.currentLocation.includes(',')) {
-        return helper.message('Latitude and Longitude must be separated by comma');
+        return helper.message(
+          'Latitude and Longitude must be separated by comma'
+        );
       }
       const lat = coordinates[0].trim();
       const long = coordinates[1].trim();
