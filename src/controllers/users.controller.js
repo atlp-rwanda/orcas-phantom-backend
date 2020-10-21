@@ -13,28 +13,40 @@ const signup = (req, res) => {
     role: req.body.role,
     busId: req.body.busId
   };
-  models.User.findOne({ where: { email: req.body.email } })
-    .then((emailFound) => {
-      if (emailFound) {
-        return res.status(409).json(
-          { status: 409, message: 'Email address already taken' }
+  const bid = req.body.busId;
+  models.Bus.findByPk(req.body.busId)
+    .then((bus) => {
+      if (!bus) {
+        return res.status(404).json(
+          {
+            status: 404,
+            message: `The bus with ID ${bid} is not found`
+          }
         );
       }
-      models.User.create(user)
-        .then((data) => {
-          const token = generateToken(data.id, data.role, data.email);
-          const userData = {
-            token,
-            userInfo: lodash.pick(data, 'busId', 'email', 'role'),
-          };
-          res.status(201).json({
-            status: 201, message: 'User created successfully', userData
-          });
-        })
+      models.User.findOne({ where: { email: req.body.email } })
+        .then((emailFound) => {
+          if (emailFound) {
+            return res.status(409).json(
+              { status: 409, message: 'Email address already taken' }
+            );
+          }
 
-        .catch(() => res.status(500).json(
-          { status: 500, message: 'server error!' }
-        ));
+          models.User.create(user)
+            .then((data) => {
+              const token = generateToken(data.id, data.role, data.email);
+              const userData = {
+                token,
+                userInfo: lodash.pick(data, 'busId', 'email', 'role'),
+              };
+              res.status(201).json({
+                status: 201, message: 'User created successfully', userData
+              });
+            })
+            .catch(() => res.status(500).json(
+              { status: 500, message: 'server error!' }
+            ));
+        });
     });
 };
 const login = (req, res) => {

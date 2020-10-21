@@ -3,7 +3,7 @@ export default (sequelize, DataTypes) => {
     email: DataTypes.STRING,
     password: DataTypes.STRING,
     role: DataTypes.STRING,
-    busId: DataTypes.STRING
+    busId: DataTypes.INTEGER
   }, {});
 
   return User;

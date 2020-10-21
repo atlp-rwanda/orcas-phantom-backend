@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from '../swagger.json';
 import routes from './routes/routes.route';
@@ -28,6 +29,15 @@ app.use((req, res) => {
   const error = new Error('Incorrect route! try again');
   error.status = 404;
   res.send({ status: error.status, message: error.message });
+});
+
+app.use(cors());
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept');
+  next();
 });
 
 export default app;
