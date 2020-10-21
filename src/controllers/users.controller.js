@@ -55,7 +55,7 @@ const login = (req, res) => {
       }
 
       const token = generateToken(
-        emailFound.id, emailFound.role, emailFound.emai
+        emailFound.id, emailFound.role, emailFound.email
       );
 
       res.status(200).json(
@@ -69,16 +69,13 @@ const login = (req, res) => {
 const getAllUsers = (req, res) => {
   models.User.findAll()
     .then((user) => {
-      if (user.length < 1) {
-        return res.status(404).json(
-          { status: 404, message: 'There are no available users' }
-        );
-      }
-
       const allusers = user.sort((a, b) => (new Date(b.updatedAt)).getTime()
         - (new Date(a.updatedAt).getTime()));
 
-      res.status(200).json({ status: 200, data: allusers });
+      const userInfo = lodash.map(allusers, lodash.partialRight(lodash.pick,
+        ['_id', 'email', 'role', 'busId', 'createdAt', 'updatedAt']));
+
+      res.status(200).json({ status: 200, data: userInfo });
     })
     .catch(() => res.status(500).json(
       { status: 500, message: 'server error!' }
@@ -94,8 +91,9 @@ const getSpecificUser = (req, res) => {
           { status: 404, message: 'There is no available user!' }
         );
       }
+      const userInfo = lodash.pick(user, 'id', 'busId', 'email', 'role');
 
-      res.status(200).json({ status: 200, user });
+      res.status(200).json({ status: 200, userInfo });
     })
     .catch(() => res.status(500).json(
       { status: 500, message: 'server error, check whether id is string!' }

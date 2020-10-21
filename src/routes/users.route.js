@@ -7,7 +7,7 @@ import {
 import {
   userSignupInput, userUpdateInput, userLoginInput
 } from '../middleware/user.validation';
-import verifyAdminToken from '../middleware/verifyAuthToken';
+import { verifyAdminToken } from '../middleware/verifyAuthToken';
 
 const users = express.Router();
 
