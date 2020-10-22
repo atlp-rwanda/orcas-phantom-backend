@@ -10,12 +10,15 @@ import {
   updateSpecificRoute
 } from '../controllers/routes.controller';
 
+import { verifyAdminToken } from '../middleware/verifyAuthToken';
+
 const router = express.Router();
 
-router.get('/', getAllRoutes);
-router.get('/:id', getSpecificRoute);
-router.post('/', [validateRouteInput], addRoute);
-router.delete('/:id', deleteSpecificRoute);
-router.patch('/:id', [validateUpdateRouteInput], updateSpecificRoute);
+router.get('/', [verifyAdminToken], getAllRoutes);
+router.get('/:id', [verifyAdminToken], getSpecificRoute);
+router.post('/', [verifyAdminToken, validateRouteInput], addRoute);
+router.delete('/:id', [verifyAdminToken], deleteSpecificRoute);
+router.patch('/:id', [verifyAdminToken, validateUpdateRouteInput],
+  updateSpecificRoute);
 
 export default router;

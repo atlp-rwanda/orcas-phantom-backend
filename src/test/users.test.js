@@ -25,24 +25,24 @@ describe('Login a user', () => {
       });
     expect(res.statusCode).toEqual(404);
   });
-  it('should return login successfull', async () => {
+  it('should return login successfully', async () => {
     const res = await request(app)
       .post('/api/login')
       .send({
         email: 'gunner@gmail.com',
         password: '111111'
       });
-    expect(res.statusCode).toEqual(404);
+    expect(res.statusCode).toEqual(200);
   });
 });
 
 describe('Get all users', () => {
-  it('should return no users', async () => {
+  it('should return all users', async () => {
     const res = await request(app)
       .get('/api/users')
       .set('Accept', 'application/json')
       .set('Authorization', token);
-    expect(res.statusCode).toEqual(404);
+    expect(res.statusCode).toEqual(200);
   });
   it('should return Header Not Set', async () => {
     const res = await request(app)

@@ -1,12 +1,8 @@
 import request from 'supertest';
 import app from '../index';
+import generateToken from '../helper/generateAuthToken';
 
-describe('Sample Test', () => {
-  it('should test that true === true', (done) => {
-    expect(true).toBe(true);
-    done();
-  });
-});
+const token = generateToken(1, 'admin', 'gunner@gmail.com');
 
 describe('GET Welcome message', () => {
   it('should get welcome message', async (done) => {
@@ -45,17 +41,26 @@ describe('POST', () => {
   beforeEach(async () => {
     await request(app)
       .post('/busstop')
+      .set('Accept', 'application/json')
+      .set('Authorization', token)
       .send(bs3);
     await request(app)
       .post('/busstop')
+      .set('Accept', 'application/json')
+      .set('Authorization', token)
       .send(bs4);
   });
   it('should create a new route', async (done) => {
-    const resp = await request(app).get('/busstop');
+    const resp = await request(app)
+      .get('/busstop')
+      .set('Accept', 'application/json')
+      .set('Authorization', token);
     const id1 = resp.body[0].id;
     const id2 = resp.body[1].id;
     const res = await request(app)
       .post('/routes')
+      .set('Accept', 'application/json')
+      .set('Authorization', token)
       .send({
         name: 'Gatsata-Nyabugogo',
         origin: id1,
@@ -69,7 +74,10 @@ describe('POST', () => {
 
 describe('GET Routes', () => {
   it('should get all routes', async (done) => {
-    const res = await request(app).get('/routes');
+    const res = await request(app)
+      .get('/routes')
+      .set('Accept', 'application/json')
+      .set('Authorization', token);
     expect(res.status).toEqual(200);
     done();
   });
@@ -77,15 +85,24 @@ describe('GET Routes', () => {
 
 describe('GET single Route', () => {
   it('should get a single route', async (done) => {
-    const resp = await request(app).get('/routes');
+    const resp = await request(app)
+      .get('/routes')
+      .set('Accept', 'application/json')
+      .set('Authorization', token);
     const routeID = resp.body[0].id;
-    const res = await request(app).get(`/routes/${routeID}`);
+    const res = await request(app)
+      .get(`/routes/${routeID}`)
+      .set('Accept', 'application/json')
+      .set('Authorization', token);
     expect(res.statusCode).toEqual(200);
     done();
   });
 
   it('should not retrieve a route of invalid id', async (done) => {
-    const res = await request(app).get(`/routes/${1000}`);
+    const res = await request(app)
+      .get(`/routes/${1000}`)
+      .set('Accept', 'application/json')
+      .set('Authorization', token);
     expect(res.statusCode).toEqual(404);
     expect(res.body.message).toEqual('Route Not found!');
     done();
@@ -94,9 +111,15 @@ describe('GET single Route', () => {
 
 describe('UPDATE single Route', () => {
   it('should update a single route', async (done) => {
-    const resp = await request(app).get('/routes');
+    const resp = await request(app)
+      .get('/routes')
+      .set('Accept', 'application/json')
+      .set('Authorization', token);
     const routeID = resp.body[resp.body.length - 1].id;
-    const res = await request(app).patch(`/routes/${routeID}`)
+    const res = await request(app)
+      .patch(`/routes/${routeID}`)
+      .set('Accept', 'application/json')
+      .set('Authorization', token)
       .send({
         name: 'Gatsata-Nyabugogo',
         origin: 6,
@@ -108,7 +131,10 @@ describe('UPDATE single Route', () => {
   });
   it('It should not delete route on invalid id', async (done) => {
     const routeID = 100;
-    const res = await request(app).patch(`/routes/${routeID}`)
+    const res = await request(app)
+      .patch(`/routes/${routeID}`)
+      .set('Accept', 'application/json')
+      .set('Authorization', token)
       .send({
         name: 'Gatsata-Nyabugogo',
         origin: 6,
@@ -122,16 +148,25 @@ describe('UPDATE single Route', () => {
 
 describe('DELETE single Route', () => {
   it('should delete single route', async (done) => {
-    const resp = await request(app).get('/routes');
+    const resp = await request(app)
+      .get('/routes')
+      .set('Accept', 'application/json')
+      .set('Authorization', token);
     const routeID = resp.body[resp.body.length - 1].id;
-    const res = await request(app).delete(`/routes/${routeID}`);
+    const res = await request(app)
+      .delete(`/routes/${routeID}`)
+      .set('Accept', 'application/json')
+      .set('Authorization', token);
     expect(res.statusCode).toEqual(200);
     done();
   });
 
   it('It should not delete route on invalid id', async (done) => {
     const routeID = 88;
-    const res = await request(app).delete(`/routes/${routeID}`);
+    const res = await request(app)
+      .delete(`/routes/${routeID}`)
+      .set('Accept', 'application/json')
+      .set('Authorization', token);
     expect(res.statusCode).toEqual(404);
     done();
   });
