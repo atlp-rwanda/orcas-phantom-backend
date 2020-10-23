@@ -62,7 +62,7 @@ describe('POST', () => {
       .set('Accept', 'application/json')
       .set('Authorization', token)
       .send({
-        name: 'Gatsata-Nyabugogo',
+        // name: 'Gatsata-Nyabugogo',
         origin: id1,
         destination: id2,
         busStops: [id1, id2]
@@ -121,7 +121,7 @@ describe('UPDATE single Route', () => {
       .set('Accept', 'application/json')
       .set('Authorization', token)
       .send({
-        name: 'Gatsata-Nyabugogo',
+        // name: 'Gatsata-Nyabugogo',
         origin: 6,
         destination: 9,
         busStops: [7, 9]
@@ -136,7 +136,7 @@ describe('UPDATE single Route', () => {
       .set('Accept', 'application/json')
       .set('Authorization', token)
       .send({
-        name: 'Gatsata-Nyabugogo',
+        // name: 'Gatsata-Nyabugogo',
         origin: 6,
         destination: 9,
         busStops: [7, 9]
