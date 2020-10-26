@@ -3,25 +3,11 @@ import model from '../database/models';
 
 export const addRoute = async (req, res) => {
   const rt = {
-    name: req.body.name,
     originID: req.body.origin,
     destinationID: req.body.destination,
     busStops: req.body.busStops
   };
   try {
-    const existRoute = await model.Route.findOne(
-      {
-        where: { name: req.body.name }
-      }
-    );
-    if (existRoute) {
-      return res.status(409).json(
-        {
-          status: 409,
-          message: `The Route with name ${req.body.name} already exist`
-        }
-      );
-    }
     const checkOrigin = await model.busStops.findByPk(rt.originID);
     if (!checkOrigin) {
       return res.status(404).json(
@@ -46,7 +32,6 @@ export const addRoute = async (req, res) => {
         }
       );
     }
-    // check for duplicate bus stops
     const checkDuplicate = () => {
       for (let i = 0; i < rt.busStops.length; i += 1) {
         for (let j = i + 1; j < rt.busStops.length; j += 1) {
@@ -62,7 +47,6 @@ export const addRoute = async (req, res) => {
         { status: 409, message: 'You have entered duplicate bus stops' }
       );
     }
-    // check if all bus stop exist
     const { Op } = Sequelize;
     const result = await model.busStops.count({
       where: {
@@ -74,6 +58,30 @@ export const addRoute = async (req, res) => {
         { status: 409, message: 'One of the bus stop does not exist' }
       );
     }
+    const bs = await model.busStops.findAll({
+      where: {
+        id: { [Op.or]: rt.busStops }
+      }
+    });
+    const names = [];
+    bs.forEach((element) => {
+      names.push(element.busStopName);
+    });
+    const rtName = names.join('-');
+    rt.name = rtName;
+    const existRoute = await model.Route.findOne(
+      {
+        where: { name: rt.name }
+      }
+    );
+    if (existRoute) {
+      return res.status(409).json(
+        {
+          status: 409,
+          message: `The Route with name ${rt.name} already exist`
+        }
+      );
+    }
     const route = await model.Route.create(rt);
     return res.status(201).json(
       { status: 201, message: 'The Route created successfully', route }
@@ -82,7 +90,6 @@ export const addRoute = async (req, res) => {
     return res.status(500).json({ error });
   }
 };
-
 export const getAllRoutes = (req, res) => {
   model.Route.findAll()
     .then((route) => {
@@ -97,22 +104,17 @@ export const getAllRoutes = (req, res) => {
     })
     .catch();
 };
-
 export const getSpecificRoute = (req, res) => {
   const { id } = req.params;
-
   model.Route.findByPk(id)
     .then((rt) => {
       if (!rt) return res.status(404).json({ message: 'Route Not found!' });
-
       res.status(200).json({ status: 200, rt });
     })
     .catch((err) => res.status(500).json({ message: err }));
 };
-
 export const deleteSpecificRoute = (req, res) => {
   const { id } = req.params;
-
   model.Route.destroy({
     where: { id }
   })
@@ -122,17 +124,14 @@ export const deleteSpecificRoute = (req, res) => {
           { message: 'Route has been deleted successfully.' }
         );
       }
-
       res.status(404).json(
         { status: 404, message: `Cannot delete route with id = ${id}` }
       );
     })
     .catch((err) => res.status(500).json({ message: err }));
 };
-
 export const updateSpecificRoute = (req, res) => {
   const { id } = req.params;
-
   model.Route.update(req.body, {
     where: { id }
   })
