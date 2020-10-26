@@ -4,7 +4,7 @@ const busInput = (req) => {
   const schema = Joi.object().keys({
     routId: Joi.number().integer().required().min(1)
       .max(150),
-    bus_plate: Joi.string().required().min(5),
+    bus_plate: Joi.string().required().min(3),
     currentLocation: Joi.string().required().custom((value, helper) => {
       const coordinates = req.body.currentLocation.split(',');
       if (!req.body.currentLocation.includes(',')) {

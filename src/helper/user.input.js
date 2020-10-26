@@ -5,7 +5,7 @@ const signupInput = (req) => {
     email: Joi.string().required().email(),
     password: Joi.string().required().min(6).max(15),
     role: Joi.string().required().valid('admin', 'bus'),
-    busId: Joi.string().required()
+    busId: Joi.number().integer().required()
   });
 
   return schema.validate(req.body);
@@ -16,7 +16,7 @@ const UpdateInput = (req) => {
     email: Joi.string().email(),
     password: Joi.string().min(6).max(15),
     role: Joi.string().valid('admin', 'bus'),
-    busId: Joi.string()
+    busId: Joi.number().integer()
   });
 
   return schema.validate(req.body);

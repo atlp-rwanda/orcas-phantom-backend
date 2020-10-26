@@ -8,7 +8,7 @@ module.exports = {
         '$2a$10$tm.Dab094hsZwhtTgVzOo.GDlTjQpNsjhTBINSUbXWjA7uhNPd2Ae',
         // password is "111111";
         role: 'admin',
-        busId: '2',
+        busId: 1,
         createdAt: new Date(),
         updatedAt: new Date(),
       },

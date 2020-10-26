@@ -67,7 +67,7 @@ describe('User Post Endpoints', () => {
         email: 'hn@gmail.com',
         password: '123456',
         role: 'admin',
-        busId: '2525'
+        busId: 1
       });
     expect(res.statusCode).toEqual(201);
   });
@@ -80,7 +80,7 @@ describe('User Post Endpoints', () => {
         email: 'habimana@gmail.com',
         password: '123456',
         role: 'admin',
-        busId: '2525'
+        busId: 1
       });
     expect(res.statusCode).toEqual(201);
   });
@@ -128,7 +128,7 @@ describe('Updating users API', () => {
         email: 'fils@gmail.com',
         password: '123456',
         role: 'admin',
-        busId: '2525'
+        busId: 1
       });
     expect(res.statusCode).toEqual(200);
   });
@@ -141,7 +141,7 @@ describe('Updating users API', () => {
         email: 'jules@gmail.com',
         password: '123456',
         role: 'man',
-        busId: '2525'
+        busId: 1
       });
     expect(res.statusCode).toEqual(400);
   });
