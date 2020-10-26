@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint ./src --fix",
-    "build": "npm run migrate:reset && npm run seed",
+    "build": "npm run migrate:reset",
     "start": "npm run build && babel-node ./src/server.js",
     "dev": "nodemon --exec babel-node ./src/server.js",
     "seed": "npx sequelize db:seed:undo:all && npx sequelize db:seed:all",
