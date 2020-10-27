@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import WebSocket from 'ws';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from '../swagger.json';
 import routes from './routes/routes.route';
@@ -12,6 +13,18 @@ const busstopRoutes = require('./routes/busStop.route');
 const app = express();
 
 app.use(express.json());
+
+const wss = new WebSocket.Server({ port: 3000 });
+
+wss.on('connection', (ws) => {
+  ws.on('message', (data) => {
+    wss.clients.forEach((client) => {
+      if (client !== ws && client.readyState === WebSocket.OPEN) {
+        client.send(data);
+      }
+    });
+  });
+});
 
 app.use('/swaggerDocument', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
