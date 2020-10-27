@@ -51,6 +51,7 @@
     "lodash": "^4.17.20",
     "pg": "^8.4.1",
     "pg-hstore": "^2.3.3",
+    "request": "^2.88.2",
     "sequelize": "^5.22.3",
     "sequelize-auto-migrations": "^1.0.3",
     "sequelize-cli": "^6.2.0",

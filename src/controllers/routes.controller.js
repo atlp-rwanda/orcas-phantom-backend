@@ -1,4 +1,5 @@
 import Sequelize from 'sequelize';
+import Request from 'request';
 import model from '../database/models';
 
 export const addRoute = async (req, res) => {
@@ -54,8 +55,8 @@ export const addRoute = async (req, res) => {
       }
     });
     if (result != rt.busStops.length) {
-      return res.status(409).json(
-        { status: 409, message: 'One of the bus stop does not exist' }
+      return res.status(404).json(
+        { status: 404, message: 'One of the bus stop does not exist' }
       );
     }
     const bs = await model.busStops.findAll({
@@ -69,6 +70,7 @@ export const addRoute = async (req, res) => {
     });
     const rtName = names.join('-');
     rt.name = rtName;
+    // check if route already exist
     const existRoute = await model.Route.findOne(
       {
         where: { name: rt.name }
@@ -82,12 +84,24 @@ export const addRoute = async (req, res) => {
         }
       );
     }
-    const route = await model.Route.create(rt);
-    return res.status(201).json(
-      { status: 201, message: 'The Route created successfully', route }
-    );
+    const ori = await model.busStops.findByPk(rt.originID);
+    const dest = await model.busStops.findByPk(rt.destinationID);
+    // eslint-disable-next-line max-len
+    Request.get(`https://api.mapbox.com/directions/v5/mapbox/driving/${ori.coordinate};${dest.coordinate}?geometries=geojson&access_token=pk.eyJ1IjoibW9uZWhpbiIsImEiOiJja2VsNjA0bXIyOXBnMnlveWtiYnNvZncwIn0.1TZdfx1jhNhrfUE78Foccg`, (error, response, body) => {
+      if (error) {
+        console.log(error);
+      }
+      const routeData = body;
+      rt.routeData = JSON.parse(routeData);
+      (async () => {
+        const route = await model.Route.create(rt);
+        return res.status(201).json(
+          { status: 201, message: 'The Route created successfully', route }
+        );
+      })();
+    });
   } catch (error) {
-    return res.status(500).json({ error });
+    console.log(error);
   }
 };
 export const getAllRoutes = (req, res) => {

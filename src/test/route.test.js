@@ -1,6 +1,7 @@
 import request from 'supertest';
 import app from '../index';
 import generateToken from '../helper/generateAuthToken';
+import model from '../database/models';
 
 const token = generateToken(1, 'admin', 'gunner@gmail.com');
 
@@ -39,16 +40,8 @@ describe('POST', () => {
   };
 
   beforeEach(async () => {
-    await request(app)
-      .post('/busstop')
-      .set('Accept', 'application/json')
-      .set('Authorization', token)
-      .send(bs3);
-    await request(app)
-      .post('/busstop')
-      .set('Accept', 'application/json')
-      .set('Authorization', token)
-      .send(bs4);
+    await model.Route.create(bs3);
+    await model.Route.create(bs4);
   });
   it('should create a new route', async (done) => {
     const resp = await request(app)
