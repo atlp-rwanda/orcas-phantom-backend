@@ -4,7 +4,7 @@ module.exports = {
     [
       {
         busStopName: 'Kinamba',
-        coordinate: '1234566.456789',
+        coordinate: '-84.518641,39.134270',
         sector: 'gisozi',
         district: 'gasabo',
         createdAt: new Date(),
@@ -12,7 +12,7 @@ module.exports = {
       },
       {
         busStopName: 'kacyiru',
-        coordinate: '1234567.678900',
+        coordinate: '-84.512023,39.102779',
         sector: 'gisozi',
         district: 'gasabo',
         createdAt: new Date(),
