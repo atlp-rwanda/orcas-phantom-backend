@@ -3,7 +3,8 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     originID: DataTypes.INTEGER,
     destinationID: DataTypes.INTEGER,
-    busStops: DataTypes.ARRAY(DataTypes.INTEGER)
+    busStops: DataTypes.ARRAY(DataTypes.INTEGER),
+    routeData: DataTypes.JSON
   }, {});
   Route.associate = (models) => {
     Route.hasMany(models.busStops, {

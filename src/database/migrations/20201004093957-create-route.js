@@ -29,6 +29,9 @@ module.exports = {
       busStops: {
         type: Sequelize.ARRAY(Sequelize.INTEGER)
       },
+      routeData: {
+        type: Sequelize.JSON,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
