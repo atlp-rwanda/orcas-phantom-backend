@@ -125,12 +125,13 @@ describe('Bus Endpoints', () => {
 
 describe('Bus Endpoints', () => {
   it('should respond with status code 404 if resource is not found',
-    async () => {
+    async (done) => {
       const busId = 1;
       const res = await request(app)
         .get(`/buses/${busId}`)
         .set('Accept', 'application/json')
         .set('Authorization', token);
       expect(res.statusCode).toEqual(404);
+      done();
     });
 });
