@@ -18,6 +18,7 @@ app.use('/swaggerDocument', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.get('/', (req, res) => res.status(200).json({
   message: 'Welcome to gunners-phanthom backend site',
 }));
+app.use(express.static('public'));
 app.use('/', busRoutes);
 
 app.use('/routes', routes);
