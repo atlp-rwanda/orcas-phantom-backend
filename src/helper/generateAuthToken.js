@@ -11,5 +11,15 @@ const generateToken = (id, role, email) => {
 
   return token;
 };
+const ActivationToken = (id, role, email, busId) => {
+  const token = jwt.sign(
+    {
+      id, role, email, busId
+    },
+    process.env.JWT_PRIVATE_KEY,
+    { expiresIn: '60m' }
+  );
 
-export default generateToken;
+  return token;
+};
+export { generateToken, ActivationToken };

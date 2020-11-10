@@ -1,46 +1,1018 @@
 {
-    "swagger": "2.0",
-    "info": {
-      "description": "Phantom is a web application that allows passengers to track bus location and movements around Kigali",
-      "version": "1.0",
-      "title": "Phantom",
-      "termsOfService": "http://swagger.io/terms/",
-      "contact": {
-        "email": "isaackomeza@gmail.com"
-      },
-      "license": {
-        "name": "MIT",
-        "url": "https://github.com/atlp-rwanda/orcas-phantom-backend/README.md"
+  "swagger": "2.0",
+  "info": {
+    "description": "Phantom is a web application that allows passengers to track bus location and movements around Kigali",
+    "version": "1.0",
+    "title": "Phantom",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "email": "isaackomeza@gmail.com"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://github.com/atlp-rwanda/orcas-phantom-backend/README.md"
+    }
+  },
+  "host": "phantom-backend.herokuapp.com",
+  "basePath": "/",
+  "schemes": ["http", "https"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/": {
+      "get": {
+        "tags": ["Welcome"],
+        "summary": "Get welcoming message",
+        "description": "This endpoint uses get request to accept",
+        "operationId": "welcome",
+        "responses": {
+          "200": {
+            "description": "Welcome to gunners-phanthom backend site"
+          }
+        }
       }
     },
-    "host": "localhost:3000",
-    "basePath": "/",
-    "schemes": ["http", "https"],
-    "paths": {
-        "/": {
-            "get": {
-              "tags": ["Welcome"],
-              "summary": "Get welcoming message",
-              "description": "This endpoint uses get request to accept",
-              "operationId": "",
-              "consumes": ["application/json", "application/xml"],
-              "produces": ["application/xml", "application/json"],
-              "parameters": [
-                {
-                  "in": "body",
-                  "name": "body",
-                  "description": "Welcome to orcas backend",
-                  "required": true
-                }
-              ],
-              "responses": {
-                "200": {
-                  "description": "Successful Operation"
-                }
-              }
+    "/api/signup": {
+      "post": {
+        "tags": ["users"],
+        "summary": "register a user",
+        "description": "This endpoint uses post request to receive body input",
+        "operationId": "signup",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Admin Token"
+          },
+          {
+            "description": "user object signup use",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SignupInput"
             }
           }
+        ],
+        "responses": {
+          "201": {
+            "description": "created successfull"
+          },
+          "404": {
+            "description": "Incorrect password or email!"
+          },
+          "400": {
+            "description": "put valid email and atleast 6 characters in password"
+          },
+          "500": {
+            "description": "internal server error"
+          }
+        }
+      }
+    },
+    "/api/login": {
+      "post": {
+        "tags": ["users"],
+        "summary": "Login a user",
+        "description": "This endpoint uses post request to receive body input",
+        "operationId": "login",
+        "parameters": [
+          {
+            "description": "user object login use",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserInput"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "login successfull"
+          },
+          "404": {
+            "description": "Incorrect password or email!"
+          },
+          "400": {
+            "description": "put valid email and atleast 6 characters in password"
+          },
+          "500": {
+            "description": "internal server error"
+          }
+        }
+      }
+    },
+    "/api/forget-password": {
+      "put": {
+        "tags": ["users"],
+        "summary": "forgot password",
+        "description": "This endpoint uses put request to receive body input",
+        "operationId": "forgotPassword",
+        "parameters": [
+          {
+            "description": "user object forgotten password use",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EmailInput"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "email sent successfully successfull"
+          },
+          "404": {
+            "description": "No associated account with this email"
+          },
+          "400": {
+            "description": "put valid email "
+          },
+          "500": {
+            "description": "internal server error"
+          }
+        }
+      }
+    },
+    "/api/reset-password": {
+      "put": {
+        "tags": ["users"],
+        "summary": "reset password",
+        "description": "This endpoint uses put request to receive body input",
+        "operationId": "resetPassword",
+        "parameters": [
+          {
+            "description": "user object reset password use",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/resetInput"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "upated successfull"
+          },
+          "400": {
+            "description": "put valid token or new password"
+          },
+          "500": {
+            "description": "internal server error"
+          }
+        }
+      }
+    },
+    
+    "/api/users": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Admin get users",
+        "description": "This endpoint uses get request to get all users",
+        "operationId": "getUsers",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Admin Token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "users retrieved"
+          },
+          "401": {
+            "description": "You are not authorized to use this resource"
+          },
+          "404": {
+            "description": "You are not authorized to use this resource"
+          },
+          "500": {
+            "description": "internal server error"
+          }
+        }
+      }
+    },
+    "/api/users/{id}": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Admin get a specific user",
+        "description": "This endpoint uses get request to get a specific user by id",
+        "operationId": "getSpecificUser",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "user object that need get user by id",
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Admin Token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user retrieved"
+          },
+          "401": {
+            "description": "You are not authorized to use this resource"
+          },
+          "404": {
+            "description": "no available user"
+          },
+          "500": {
+            "description": "internal server error"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["users"],
+        "summary": "Admin update a specific user",
+        "description": "This endpoint uses patch request to update a specific user by id",
+        "operationId": "updateUser",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "user object that need to update a user by id",
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Admin Token"
+          },
+          {
+            "description": "user object login use",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserInput"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User was updated successfully."
+          },
+          "401": {
+            "description": "You are not authorized to use this resource"
+          },
+          "404": {
+            "description": "There is no available user!"
+          },
+          "409": {
+            "description": "Email address already taken"
+          },
+          "500": {
+            "description": "internal server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["users"],
+        "summary": "Admin delete a specific user",
+        "description": "This endpoint uses delete request to delete a specific user by id",
+        "operationId": "deleteSpecificUser",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "user object that need get user by id",
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Admin Token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User was deleted successfully."
+          },
+          "401": {
+            "description": "You are not authorized to use this resource"
+          },
+          "404": {
+            "description": "Cannot delete User with this id  who is not found!"
+          },
+          "500": {
+            "description": "internal server error"
+          }
+        }
+      }
+    },
+    "/routes": {
+      "get": {
+        "tags": ["routes"],
+        "summary": "Admin get all routes",
+        "description": "This endpoint uses get request to get all routes",
+        "operationId": "getAllroutes",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Admin Token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "routes retrieved successfully"
+          },
+          "401": {
+            "description": "You are not authorized to use this resource"
+          },
+          "404": {
+            "description": "There are no available Routes"
+          },
+          "500": {
+            "description": "internal server error"
+          }
+        }
+      },
+      "post": {
+        "tags": ["routes"],
+        "summary": "Admin add new route",
+        "description": "This endpoint uses post request to add new route",
+        "operationId": "createNewRoute",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Admin Token"
+          },
+          {
+            "description": "Route object use",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RouteInput"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "The Route created successfully"
+          },
+          "409": {
+            "description": "conflict"
+          },
+          "401": {
+            "description": "You are not authorized to use this resource"
+          },
+          "404": {
+            "description": "The Bus stop for origin does not exist"
+          },
+          "400": {
+            "description": "invalid input"
+          },
+          "500": {
+            "description": "internal server error"
+          }
+        }
+      }
+    },
 
+    "/routes/{id}": {
+      "get": {
+        "tags": ["routes"],
+        "summary": "Admin get specific route",
+        "description": "This endpoint uses get request to get specific route by id",
+        "operationId": "getSpecificRoute",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "user object that need get user by id",
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Admin Token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "route retrieved"
+          },
+          "401": {
+            "description": "You are not authorized to complete this task"
+          },
+          "404": {
+            "description": "Route Not found!"
+          },
+          "500": {
+            "description": "internal server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["routes"],
+        "summary": "Admin delete specific route",
+        "description": "This endpoint uses delete request to delete specific route by id",
+        "operationId": "deleteSpecificRoute",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "user object that need delete route by id",
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Admin Token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Route has been deleted successfully."
+          },
+          "401": {
+            "description": "You are not authorized to complete this task"
+          },
+          "404": {
+            "description": "Cannot delete route with id = ${id}"
+          },
+          "500": {
+            "description": "internal server error"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["routes"],
+        "summary": "Admin update specific route",
+        "description": "This endpoint uses update request to update specific route by id",
+        "operationId": "updateSpecificRoute",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "user object that need update route by id",
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Admin Token"
+          },
+          {
+            "description": "Route object use",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RouteInput"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Route updated successfully.."
+          },
+          "401": {
+            "description": "You are not authorized to complete this task"
+          },
+          "404": {
+            "description": "Cannot update route with id = ${id}"
+          },
+          "500": {
+            "description": "internal server error"
+          }
+        }
+      }
+    },
+    "/busstop": {
+      "get": {
+        "tags": ["bus stops"],
+        "summary": "Admin get all bus stops",
+        "description": "This endpoint uses get request to get all bus stop",
+        "operationId": "getAllBusStop",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Admin Token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "bus stops retrieved successfully"
+          },
+          "401": {
+            "description": "You are not authorized to use this resource"
+          },
+          "404": {
+            "description": "There are no available Bus stop"
+          },
+          "500": {
+            "description": "internal server error"
+          }
+        }
+      },
+      "post": {
+        "tags": ["bus stops"],
+        "summary": "Admin add new bus stop",
+        "description": "This endpoint uses post request to add new bus stops",
+        "operationId": "createNewBusStop",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Admin Token"
+          },
+          {
+            "description": "bus stop object use",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BusStopInput"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "bus Stop created successfully"
+          },
+          "401": {
+            "description": "You are not authorized to use this resource"
+          },
+          "404": {
+            "description": "The Bus stop for origin does not exist"
+          },
+          "400": {
+            "description": "invalid input"
+          },
+          "500": {
+            "description": "internal server error"
+          }
+        }
+      }
+    },
+
+    "/busstop/{id}": {
+      "get": {
+        "tags": ["bus stops"],
+        "summary": "Admin get specific bus stop",
+        "description": "This endpoint uses get request to get specific bus stop by id",
+        "operationId": "getSpecificBusStops",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "user object that need get user by id",
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Admin Token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "bus stop retrieved"
+          },
+          "401": {
+            "description": "You are not authorized to complete this task"
+          },
+          "404": {
+            "description": "bus stop Not found!"
+          },
+          "500": {
+            "description": "internal server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["bus stops"],
+        "summary": "Admin delete specific bus stop",
+        "description": "This endpoint uses delete request to delete specific bus stop by id",
+        "operationId": "deleteSpecificBusStop",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "user object that need delete bus stop by id",
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Admin Token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Bus stop has been deleted successfully."
+          },
+          "401": {
+            "description": "You are not authorized to complete this task"
+          },
+          "404": {
+            "description": "Cannot delete bus stop with id = ${id}"
+          },
+          "500": {
+            "description": "internal server error"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["bus stops"],
+        "summary": "Admin update specific bus stop",
+        "description": "This endpoint uses update request to update specific bus stop by id",
+        "operationId": "updateSpecificBusStop",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "user object that need update bus stop by id",
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Admin Token"
+          },
+          {
+            "description": "bus stop object use",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BusStopInput"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "bus stop updated successfully.."
+          },
+          "401": {
+            "description": "You are not authorized to complete this task"
+          },
+          "404": {
+            "description": "Cannot update bus stop with id = ${id}"
+          },
+          "500": {
+            "description": "internal server error"
+          }
+        }
+      }
+    },
+    "/buses": {
+      "get": {
+        "tags": ["buses"],
+        "summary": "Admin get all buses",
+        "description": "This endpoint uses get request to get all buses",
+        "operationId": "getAllBuses",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Admin Token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "buses retrieved successfully"
+          },
+          "401": {
+            "description": "You are not authorized to use this resource"
+          },
+          "404": {
+            "description": "There are no available buses"
+          },
+          "500": {
+            "description": "internal server error"
+          }
+        }
+      },
+      "post": {
+        "tags": ["buses"],
+        "summary": "Admin add new bus",
+        "description": "This endpoint uses post request to add new bus",
+        "operationId": "createNewBusStop",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Admin Token"
+          },
+          {
+            "description": "bus object use",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BusInput"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "bus created successfully"
+          },
+          "401": {
+            "description": "You are not authorized to use this resource"
+          },
+          "404": {
+            "description": "The Bus for origin does not exist"
+          },
+          "400": {
+            "description": "invalid input"
+          },
+          "500": {
+            "description": "internal server error"
+          }
+        }
+      }
+    },
+
+    "/buses/{id}": {
+      "get": {
+        "tags": ["buses"],
+        "summary": "Admin get specific bus",
+        "description": "This endpoint uses get request to get specific bus by id",
+        "operationId": "getSpecificBus",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "user object that need get user by id",
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Admin Token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "bus retrieved"
+          },
+          "401": {
+            "description": "You are not authorized to complete this task"
+          },
+          "404": {
+            "description": "bus Not found!"
+          },
+          "500": {
+            "description": "internal server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["buses"],
+        "summary": "Admin delete specific bus",
+        "description": "This endpoint uses delete request to delete specific bus by id",
+        "operationId": "deleteSpecificBus",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "user object that need delete bus by id",
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Admin Token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Bus has been deleted successfully."
+          },
+          "401": {
+            "description": "You are not authorized to complete this task"
+          },
+          "404": {
+            "description": "Cannot delete bus with id = ${id}"
+          },
+          "500": {
+            "description": "internal server error"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["buses"],
+        "summary": "Admin update specific bus",
+        "description": "This endpoint uses update request to update specific bus by id",
+        "operationId": "updateSpecificBus",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "user object that need update bus by id",
+            "required": true
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Admin Token"
+          },
+          {
+            "description": "bus object use",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BusInput"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "bus updated successfully.."
+          },
+          "401": {
+            "description": "You are not authorized to complete this task"
+          },
+          "400": {
+            "description": "invalid inputs"
+          },
+          "404": {
+            "description": "Cannot update bus with id = ${id}"
+          },
+          "500": {
+            "description": "internal server error"
+          }
+        }
+      }
     }
+  },
+
+  "definitions": {
+    "UserInput": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "required": true
+        },
+        "password": {
+          "type": "string",
+          "required": true
+        }
+      }
+    },
+    "SignupInput": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "required": true
+        },
+        "password": {
+          "type": "string",
+          "required": true
+        },
+        "role": {
+          "type": "string",
+          "enum": ["bus", "admin"],
+          "required": true
+        },
+        "busId": {
+          "type": "integer",
+          "required": true
+        }
+      }
+    },
+    "EmailInput": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "required": true
+        }
+      }
+     
+    },
+    "resetInput":{
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string",
+          "required": true
+        },
+        "newPassword": {
+          "type": "string",
+          "required": true
+        }
+      }
+    },
+    "RouteInput": {
+      "type": "object",
+      "properties": {
+        "origin": {
+          "type": "integer"
+        },
+        "destination": {
+          "type": "integer"
+        },
+        "busStops": {
+          "type": "array",
+          "items": {
+            "types": "integer"
+          },
+          "required": true
+        }
+      }
+    },
+    "BusStopInput": {
+      "type": "object",
+      "properties": {
+        "busStopName": {
+          "type": "string",
+          "required": true
+        },
+        "coordinate": {
+          "type": "string",
+          "required": true
+        },
+        "sector": {
+          "type": "string",
+          "required": true
+        },
+        "district": {
+          "type": "string",
+          "required": true
+        }
+      }
+    },
+    "BusInput": {
+      "type": "object",
+      "properties": {
+        "routId": {
+          "type": "integer",
+          "required": true
+        },
+        "bus_plate": {
+          "type": "string",
+          "required": true
+        },
+        "currentLocation": {
+          "type": "string",
+          "required": true
+        },
+        "bus_status": {
+          "type": "string",
+          "enum": ["inactive", "active"],
+          "required": true
+        }
+      }
+    }
+  }
 }
-  

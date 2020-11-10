@@ -1,6 +1,6 @@
 import request from 'supertest';
 import app from '../index';
-import generateToken from '../helper/generateAuthToken';
+import { generateToken } from '../helper/generateAuthToken';
 
 const token = generateToken(1, 'admin', 'gunner@gmail.com');
 
@@ -24,6 +24,48 @@ describe('Bus Endpoints', () => {
       });
     expect(res.statusCode).toEqual(201);
     expect(res.body).toHaveProperty('bus');
+  });
+  it('should not create a new bus when currentLocation is'
+  + ' invalid', async () => {
+    const res = await request(app)
+      .post('/buses')
+      .set('Accept', 'application/json')
+      .set('Authorization', token)
+      .send({
+        routId: 1,
+        bus_plate: 'RAE 245 C',
+        currentLocation: '-dgg556665564647',
+        bus_status: 'inactive'
+      });
+    expect(res.statusCode).toEqual(400);
+  });
+  it('should not create a new bus when longitude is'
+  + ' invalid', async () => {
+    const res = await request(app)
+      .post('/buses')
+      .set('Accept', 'application/json')
+      .set('Authorization', token)
+      .send({
+        routId: 1,
+        bus_plate: 'RAE 245 C',
+        currentLocation: '-556665,d564647',
+        bus_status: 'inactive'
+      });
+    expect(res.statusCode).toEqual(400);
+  });
+  it('should not create a new bus when currentLocation is'
+  + ' invalid', async () => {
+    const res = await request(app)
+      .post('/buses')
+      .set('Accept', 'application/json')
+      .set('Authorization', token)
+      .send({
+        routId: 1,
+        bus_plate: 'RAE 245 C',
+        currentLocation: '-d556665,564647',
+        bus_status: 'inactive'
+      });
+    expect(res.statusCode).toEqual(400);
   });
 });
 describe('Bus Endpoints', () => {
@@ -78,6 +120,45 @@ describe('Bus Endpoints', () => {
       });
     expect(res.statusCode).toEqual(200);
     expect(res.body).toHaveProperty('bus');
+  });
+  it('should not update a bus when current location is invalid', async () => {
+    const res = await request(app)
+      .patch('/buses/2')
+      .set('Accept', 'application/json')
+      .set('Authorization', token)
+      .send({
+        routId: 2,
+        bus_plate: 'RAE 245 C',
+        currentLocation: '-55.66655.64647',
+        bus_status: 'inactive'
+      });
+    expect(res.statusCode).toEqual(400);
+  });
+  it('should not update a bus when latitude is invalid', async () => {
+    const res = await request(app)
+      .patch('/buses/2')
+      .set('Accept', 'application/json')
+      .set('Authorization', token)
+      .send({
+        routId: 2,
+        bus_plate: 'RAE 245 C',
+        currentLocation: '-b55.666,55.64647',
+        bus_status: 'inactive'
+      });
+    expect(res.statusCode).toEqual(400);
+  });
+  it('should not update a bus when longitude is invalid', async () => {
+    const res = await request(app)
+      .patch('/buses/2')
+      .set('Accept', 'application/json')
+      .set('Authorization', token)
+      .send({
+        routId: 2,
+        bus_plate: 'RAE 245 C',
+        currentLocation: '-55.666,b55.64647',
+        bus_status: 'inactive'
+      });
+    expect(res.statusCode).toEqual(400);
   });
 });
 

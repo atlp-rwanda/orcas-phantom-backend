@@ -30,4 +30,22 @@ const loginInput = (req) => {
 
   return schema.validate(req.body);
 };
-export { signupInput, UpdateInput, loginInput };
+const EmailInput = (req) => {
+  const schema = Joi.object().keys({
+    email: Joi.string().required().email()
+  });
+
+  return schema.validate(req.body);
+};
+const resetInput = (req) => {
+  const schema = Joi.object().keys({
+    token: Joi.string().required(),
+    newPassword: Joi.string().required().min(6).max(15)
+  });
+
+  return schema.validate(req.body);
+};
+export {
+  signupInput, UpdateInput, loginInput, EmailInput,
+  resetInput
+};
