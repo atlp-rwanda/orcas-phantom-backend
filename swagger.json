@@ -13,7 +13,7 @@
       "url": "https://github.com/atlp-rwanda/orcas-phantom-backend/README.md"
     }
   },
-  "host": "https://phantom-backend.herokuapp.com",
+  "host": "phantom-backend.herokuapp.com",
   "basePath": "/",
   "schemes": ["http", "https"],
   "consumes": ["application/json"],
@@ -28,6 +28,46 @@
         "responses": {
           "200": {
             "description": "Welcome to gunners-phanthom backend site"
+          }
+        }
+      }
+    },
+    "/api/signup": {
+      "post": {
+        "tags": ["users"],
+        "summary": "register a user",
+        "description": "This endpoint uses post request to receive body input",
+        "operationId": "signup",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Admin Token"
+          },
+          {
+            "description": "user object signup use",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SignupInput"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "created successfull"
+          },
+          "404": {
+            "description": "Incorrect password or email!"
+          },
+          "400": {
+            "description": "put valid email and atleast 6 characters in password"
+          },
+          "500": {
+            "description": "internal server error"
           }
         }
       }
@@ -65,6 +105,70 @@
         }
       }
     },
+    "/api/forget-password": {
+      "put": {
+        "tags": ["users"],
+        "summary": "forgot password",
+        "description": "This endpoint uses put request to receive body input",
+        "operationId": "forgotPassword",
+        "parameters": [
+          {
+            "description": "user object forgotten password use",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/EmailInput"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "email sent successfully successfull"
+          },
+          "404": {
+            "description": "No associated account with this email"
+          },
+          "400": {
+            "description": "put valid email "
+          },
+          "500": {
+            "description": "internal server error"
+          }
+        }
+      }
+    },
+    "/api/reset-password": {
+      "put": {
+        "tags": ["users"],
+        "summary": "reset password",
+        "description": "This endpoint uses put request to receive body input",
+        "operationId": "resetPassword",
+        "parameters": [
+          {
+            "description": "user object reset password use",
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/resetInput"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "upated successfull"
+          },
+          "400": {
+            "description": "put valid token or new password"
+          },
+          "500": {
+            "description": "internal server error"
+          }
+        }
+      }
+    },
+    
     "/api/users": {
       "get": {
         "tags": ["users"],
@@ -799,6 +903,51 @@
           "required": true
         },
         "password": {
+          "type": "string",
+          "required": true
+        }
+      }
+    },
+    "SignupInput": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "required": true
+        },
+        "password": {
+          "type": "string",
+          "required": true
+        },
+        "role": {
+          "type": "string",
+          "enum": ["bus", "admin"],
+          "required": true
+        },
+        "busId": {
+          "type": "integer",
+          "required": true
+        }
+      }
+    },
+    "EmailInput": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "required": true
+        }
+      }
+     
+    },
+    "resetInput":{
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string",
+          "required": true
+        },
+        "newPassword": {
           "type": "string",
           "required": true
         }

@@ -1,6 +1,6 @@
 import request from 'supertest';
 import app from '../index';
-import generateToken from '../helper/generateAuthToken';
+import { generateToken } from '../helper/generateAuthToken';
 
 const token = generateToken(1, 'admin', 'gunner@gmail.com');
 
