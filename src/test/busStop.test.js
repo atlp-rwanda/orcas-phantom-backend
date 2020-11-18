@@ -178,3 +178,13 @@ describe('DELETE single busstop', () => {
     expect(res.statusCode).toEqual(500);
   });
 });
+
+describe('Search busstop by its name', () => {
+  it('Should search busstop and return all with Nya keyword', async (done) => {
+    const res = await request(app)
+      .get('/searchbusstop?bstop=Nya')
+      .set('Accept', 'application/json');
+    expect(res.statusCode).toEqual(200);
+    done();
+  });
+});

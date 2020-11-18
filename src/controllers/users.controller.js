@@ -256,7 +256,7 @@ const resetPassword = (req, res) => {
       }
       const updateUser = {
         email: decodedToken.email,
-        password: newPassword,
+        password: encryptPassword(newPassword),
         role: decodedToken.role,
         busId: decodedToken.busId,
       };
