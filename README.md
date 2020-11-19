@@ -6,7 +6,7 @@
 Phantom is a web application that allows passengers to track bus location and movements around Kigali.
 
 # API Documentation :pencil:
-API endpoints Documentation are hosted [Here](https://phantom-backend.herokuapp.com//swaggerDocument/)
+API endpoints Documentation are hosted [Here](https://phantom-backend.herokuapp.com/swaggerDocument/)
 
 ## Technologies && Tools
 
@@ -47,9 +47,9 @@ Run Test case
 | POST /api/login         |    admin log into his/her account     |
 | POST /api/signup        |    admin create his/her account       |
 | GET /api/users/         |    admin get all users                |
-| GET /api//users/:id     |    admin get a specific user by id    |
-| PATCH /api//users/:id   |    admin update a specific user       |
-| DELETE /api//users/:id  |    admin delete a specific user       |
+| GET /api/users/:id     |    admin get a specific user by id    |
+| PATCH /api/users/:id   |    admin update a specific user       |
+| DELETE /api/users/:id  |    admin delete a specific user       |
 | GET /routes             |    admin get all routes               |
 | GET /routes/:id         |    admin get a specific route by id   |
 | POST /routes            |    admin add a new route              |
@@ -69,15 +69,16 @@ Run Test case
 
 ### contributors
 
-* [Orcas phantom backend team](https://github.com/atlp-rwanda/orcas-phantom-backend.git) 
+* [Orcas Phantom backend team](https://github.com/atlp-rwanda/orcas-phantom-backend.git) 
 * [Isaac Komezusenge](https://github.com/Isaackomeza) 
 * [Fiston Habimana](https://github.com/fistonhn)
 * [Giraneza Fiacre](https://github.com/giranezafiacre)
 * [Ange Imaraika](https://github.com/Imaraika)
 * [Marius Robert Rwandarushya](https://github.com/Rwandarushya)
 * [Eric Malaba](https://github.com/Malaba6)
-* [emmanuel Monehin](https://github.com/Monehin)
+* [Emmanuel Monehin](https://github.com/Monehin)
+* [Maxime Ishimwe](https://github.com/maximeish)
 
 ### Acknowledgement
 
-*[Andela Kigali-Rwanda](https://github.com/atlp-rwanda)
+* [Andela Kigali - Rwanda](https://github.com/atlp-rwanda)

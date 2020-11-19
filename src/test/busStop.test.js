@@ -62,6 +62,20 @@ describe('GET BusStops', () => {
     expect(res.status).toEqual(200);
     done();
   });
+  it('should get all busStops in geojson format', async (done) => {
+    const res = await request(app)
+      .get('/allbusstop?type=geojson')
+      .set('Accept', 'application/json');
+    expect(res.status).toEqual(200);
+    done();
+  });
+  it('should return malformed request (missing query)', async (done) => {
+    const res = await request(app)
+      .get('/allbusstop?type=geojs')
+      .set('Accept', 'application/json');
+    expect(res.status).toEqual(422);
+    done();
+  });
   it('should return server error', async () => {
     const res = await request(app)
       .delete('/busstop/funga')
