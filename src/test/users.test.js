@@ -1,9 +1,14 @@
 import request from 'supertest';
 import app from '../index';
-import generateToken from '../helper/generateAuthToken';
+import { generateToken, ActivationToken } from '../helper/generateAuthToken';
 
 const token = generateToken(1, 'admin', 'gunner@gmail.com');
-
+const resettoken = ActivationToken(
+  2,
+  'admin',
+  'fiacregiraneza@gmail.com',
+  1
+);
 const invalidToken = '';
 
 describe('Login a user', () => {
@@ -23,6 +28,9 @@ describe('Login a user', () => {
         email: 'gunner@gmail.com',
         password: '123456'
       });
+    console.log('_______________');
+    console.log(res);
+    console.log('_______________');
     expect(res.statusCode).toEqual(404);
   });
   it('should return login successfully', async () => {
@@ -167,5 +175,87 @@ describe('Delete a user by id', () => {
       .set('Accept', 'application/json')
       .set('Authorization', token);
     expect(res.statusCode).toEqual(500);
+  });
+});
+describe('reset password for forgotten password', () => {
+  beforeEach(async () => {
+    await request(app)
+      .post('/api/signup')
+      .set('Accept', 'application/json')
+      .set('Authorization', token)
+      .send({
+        email: 'fiacregiraneza@gmail.com',
+        password: '123456',
+        role: 'admin',
+        busId: 1
+      });
+  });
+  afterEach(async () => {
+    await request(app)
+      .delete('/api/users/2')
+      .set('Accept', 'application/json')
+      .set('Authorization', token);
+  });
+  it('should send link to email of user who forgot password', (done) => {
+    request(app)
+      .put('/api/forget-password')
+      .send({
+        email: 'fiacregiraneza@gmail.com'
+      }).timeout(10000)
+      .end((err, res) => {
+        expect(res.statusCode).toEqual(200);
+        done();
+      });
+  });
+  it('should not allow user who send unstored email to receive a link',
+    async () => {
+      const res = await request(app)
+        .put('/api/forget-password')
+        .send({
+          email: 'Arsene@gmail.com'
+        });
+      expect(res.statusCode).toEqual(404);
+    });
+
+  it('should reset password of user who forgot password', async () => {
+    const res = await request(app)
+      .put('/api/reset-password')
+      .send({
+        token: resettoken,
+        newPassword: 'fiacregiraneza'
+      });
+    expect(res.statusCode).toEqual(200);
+  });
+  it('should not reset password of user who forgot'
+  + ' password when he/she provided invalid token',
+  async () => {
+    const res = await request(app)
+      .put('/api/reset-password')
+      .send({
+        token: 'htmyo',
+        newPassword: 'fiacregiraneza'
+      });
+    expect(res.statusCode).toEqual(401);
+  });
+  it('should not reset password of user who forgot'
+  + ' password when he/she provided invalid input',
+  async () => {
+    const res = await request(app)
+      .put('/api/reset-password')
+      .send({
+        token: null,
+        newPassword: null
+      });
+    expect(res.statusCode).toEqual(400);
+  });
+  it('should not send link to email of user'
+  + ' who forgot password and provide invalid input',
+  async () => {
+    const res = await request(app)
+      .put('/api/forget-password')
+      .send({
+        email: null
+      });
+    expect(res.statusCode).toEqual(400);
   });
 });

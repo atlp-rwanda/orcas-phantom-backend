@@ -12,7 +12,6 @@ const busstopRoutes = require('./routes/busStop.route');
 const app = express();
 
 app.use(express.json());
-
 app.use('/swaggerDocument', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.get('/', (req, res) => res.status(200).json({
@@ -20,7 +19,6 @@ app.get('/', (req, res) => res.status(200).json({
 }));
 app.use(express.static('public'));
 app.use('/', busRoutes);
-
 app.use('/routes', routes);
 app.use('/', busstopRoutes);
 
