@@ -1,4 +1,4 @@
-import Sequelize from 'sequelize';
+import Sequelize, { Op } from 'sequelize';
 import models from '../database/models';
 
 // prettier-ignore
@@ -162,6 +162,19 @@ const updateBusStop = (req, res) => {
     ));
 };
 
+const searchBusStop = (req, res) => {
+  let { bstop } = req.query;
+
+  bstop = bstop.toLowerCase();
+
+  models.busStops
+    .findAll({ where: { busStopName: { [Op.iLike]: `%${bstop}%` } } })
+    .then((busStops) => res.status(200).json({ busStops }))
+    .catch(() => {
+      res.status(404).json({ status: 404, message: 'No Result found' });
+    });
+};
+
 module.exports = {
   createBusStop,
   getAllBusStops,
@@ -169,4 +182,5 @@ module.exports = {
   getBusStopById,
   updateBusStop,
   deleteBusStop,
+  searchBusStop
 };

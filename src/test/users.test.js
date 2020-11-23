@@ -28,9 +28,6 @@ describe('Login a user', () => {
         email: 'gunner@gmail.com',
         password: '123456'
       });
-    console.log('_______________');
-    console.log(res);
-    console.log('_______________');
     expect(res.statusCode).toEqual(404);
   });
   it('should return login successfully', async () => {

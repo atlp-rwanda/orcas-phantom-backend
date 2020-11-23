@@ -5,11 +5,11 @@ import swaggerDocument from '../swagger.json';
 import routes from './routes/routes.route';
 import users from './routes/users.route';
 
+const app = express();
+
 const busRoutes = require('./routes/bus.route');
 
 const busstopRoutes = require('./routes/busStop.route');
-
-const app = express();
 
 app.use(express.json());
 app.use('/swaggerDocument', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
