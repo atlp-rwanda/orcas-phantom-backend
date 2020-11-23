@@ -203,7 +203,7 @@ describe('reset password for forgotten password', () => {
         email: 'fiacregiraneza@gmail.com'
       }).timeout(10000)
       .end((err, res) => {
-        expect(res.statusCode).toEqual(200);
+        expect(res.status).toEqual(200);
         done();
       });
   });

@@ -1,6 +1,8 @@
 import Sequelize from 'sequelize';
 import models from '../database/models';
 
+// prettier-ignore
+
 const createBusStop = (req, res) => {
   const bust = {
     busStopName: req.body.busStopName,
@@ -46,7 +48,52 @@ const getAllBusStops = (req, res) => {
       }
       const allBusStops = bust.sort((a, b) => (new Date(b.updatedAt)).getTime()
           - (new Date(a.updatedAt).getTime()));
-      res.status(200).json(allBusStops);
+
+      return res.status(200).json(allBusStops);
+    })
+    .catch(() => res.status(500).json(
+      { status: 500, message: 'server error!' }
+    ));
+};
+
+const getAllBusStopsGeoJson = (req, res) => {
+  models.busStops.findAll()
+    .then((bust) => {
+      if (bust.length < 1) {
+        return res.status(404).json(
+          { status: 404, message: 'There are no available Busstop' }
+        );
+      }
+      const allBusStops = bust.sort((a, b) => (new Date(b.updatedAt)).getTime()
+          - (new Date(a.updatedAt).getTime()));
+
+      if (req.query.type !== undefined
+        && req.query.type.toLowerCase() === 'geojson') {
+        const geoJsonBusStops = {
+          type: 'FeatureCollection',
+          features: allBusStops.map((busStop) => ({
+            type: 'Feature',
+            properties: {
+              id: busStop.id,
+              busStopName: busStop.busStopName,
+              sector: busStop.sector,
+              district: busStop.district,
+              createdAt: busStop.createdAt,
+              updatedAt: busStop.updatedAt,
+            },
+            geometry: {
+              type: 'Point',
+              coordinates: [
+                busStop.coordinate.split(',')[0],
+                busStop.coordinate.split(',')[1],
+              ],
+            },
+          })),
+        };
+
+        return res.status(200).json(geoJsonBusStops);
+      }
+      return res.status(422).json({});
     })
     .catch(() => res.status(500).json(
       { status: 500, message: 'server error!' }
@@ -118,6 +165,7 @@ const updateBusStop = (req, res) => {
 module.exports = {
   createBusStop,
   getAllBusStops,
+  getAllBusStopsGeoJson,
   getBusStopById,
   updateBusStop,
   deleteBusStop,

@@ -16,6 +16,8 @@ router.post('/busstop', [verifyAdminToken, busStopInput],
 
 router.get('/busstop', [verifyAdminToken], controllers.getAllBusStops);
 
+router.get('/allbusstop', controllers.getAllBusStopsGeoJson);
+
 router.get('/busstop/:id', [verifyAdminToken], controllers.getBusStopById);
 
 router.patch('/busstop/:id', [verifyAdminToken, busStopUpdateInput],
