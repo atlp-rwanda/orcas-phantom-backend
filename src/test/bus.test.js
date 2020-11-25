@@ -100,7 +100,7 @@ describe('Bus Endpoints', () => {
 describe('Bus Endpoints', () => {
   it('should not update a bus with invalid ID', async () => {
     const res = await request(app)
-      .patch('/buses/a')
+      .patch('/buses/555')
       .set('Accept', 'application/json')
       .set('Authorization', token)
       .send({
@@ -109,7 +109,7 @@ describe('Bus Endpoints', () => {
         currentLocation: '-55666, 5564647',
         bus_status: 'inactive'
       });
-    expect(res.statusCode).toEqual(500);
+    expect(res.statusCode).toEqual(404);
   });
 });
 

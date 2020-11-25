@@ -1,7 +1,9 @@
+import redis from 'redis';
 import app from './index';
 import db from './database/models';
 import websocketServer from './websocket-server';
 
+const client = redis.createClient();
 const http = require('http');
 const WSS = require('ws');
 
@@ -16,3 +18,7 @@ db.sequelize.sync({ alter: false })
     console.log('database connected.');
     server.listen(port, console.log(`server has started on port ${port}`));
   });
+
+client.on('connect', () => {
+  console.log('Redis connected');
+});

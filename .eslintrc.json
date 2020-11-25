@@ -7,6 +7,8 @@
     "mocha": true
   },
   "rules": {
+    "no-else-return":0,
+    "no-inner-declarations":0,
     "eqeqeq":0,
     "max-len": ["error", { "code": 80 }],
     "linebreak-style":0,

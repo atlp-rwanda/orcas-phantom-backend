@@ -1,3 +1,6 @@
+import redis from 'redis';
+
+const clienty = redis.createClient();
 const websocketServer = (wss) => {
   wss.on('connection', (socket) => {
     console.log('Opened Connection');
@@ -16,18 +19,28 @@ const websocketServer = (wss) => {
       console.log('Connection Closed');
     });
   });
+  // eslint-disable-next-line no-use-before-define
+  setInterval(broadcast, 1000);
+  // const timeInt =
 
-  const broadcast = () => {
-    const currentLocation = '11.86136, -56.45234';
-    const json = JSON.stringify({
-      Location: `Hello The nearby Bus Location is:${currentLocation}`,
+  // eslint-disable-next-line require-jsdoc
+  function broadcast() {
+    clienty.get('buses', async (err, reply) => {
+      const currentLocation = JSON.parse(reply);
+      console.log(reply, currentLocation);
+      const json = JSON.stringify({
+        // eslint-disable-next-line max-len
+        Location: `Hello The nearby Bus Location is:${currentLocation}`,
+      });
+      // if (currentLocation) {
+      //   clearInterval(timeInt);
+      // }
+      wss.clients.forEach((client) => {
+        client.send(json);
+        console.log(reply);
+      });
     });
-    wss.clients.forEach((client) => {
-      client.send(json);
-      console.log(`Sent: Hello The nearby Bus Location is: ${currentLocation}`);
-    });
-  };
-  setInterval(broadcast, 3000);
+  }
 };
 
 export default websocketServer;

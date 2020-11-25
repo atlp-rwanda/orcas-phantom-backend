@@ -67,7 +67,7 @@ describe('User Post Endpoints', () => {
         email: 'hn@gmail.com',
         password: '123456',
         role: 'admin',
-        busId: 1
+        busId: 2
       });
     expect(res.statusCode).toEqual(201);
   });
