@@ -13,7 +13,7 @@
     "migrate:reset": "npx sequelize-cli db:migrate:undo:all && npm run migrate && npm run seed",
     "test": "cross-env NODE_ENV=test jest --detectOpenHandles --coverage --verbose && cat ./coverage/lcov.info",
     "pretest": "cross-env NODE_ENV=test npm run migrate:reset",
-    "coverage": "npm run pretest && jest --detectOpenHandles --coverage && cat ./coverage/lcov.info | coveralls",
+    "coverage": "npm run pretest && jest --verbose --detectOpenHandles --coverage && cat ./coverage/lcov.info | coveralls",
     "drop:db": "cross-env NODE_ENV=test node_modules/.bin/sequelize db:drop phantom_test",
     "create:db": "cross-env NODE_ENV=test node_modules/.bin/sequelize db:create phantom_test"
   },
