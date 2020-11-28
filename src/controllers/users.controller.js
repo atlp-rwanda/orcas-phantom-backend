@@ -1,7 +1,7 @@
 import lodash from 'lodash';
-import mailgun from 'mailgun-js';
 import jwt from 'jsonwebtoken';
 import models from '../database/models';
+import sendTemplatedMail from '../helper/sendEmail';
 import { encryptPassword, decryptPassword } from '../helper/hashedPassword';
 import { generateToken, ActivationToken } from '../helper/generateAuthToken';
 
@@ -42,12 +42,9 @@ const signup = (req, res) => {
               userData,
             });
           })
-          .catch((error) => {
-            console.log(error);
-            return res.status(500).json({
-              status: 500, message: 'server error!'
-            });
-          });
+          .catch(() => res.status(500).json({
+            status: 500, message: 'server error!'
+          }));
       }
     );
   });
@@ -82,18 +79,12 @@ const login = (req, res) => {
         .status(200)
         .json({ status: 200, message: 'login successfull', token });
     })
-    .catch((error) => {
-      console.log('error ', error);
-      return res.status(500).json({
-        status: 500, message: 'server error!'
-      });
-    });
+    .catch(() => res.status(500).json({
+      status: 500, message: 'server error!'
+    }));
 };
 
 const forgetPassword = (req, res) => {
-  const DOMAIN = 'sandboxd46faa8db3ca4229893a2360b3b50acc.mailgun.org';
-  const mg = mailgun({ apiKey: process.env.MAILGUN_APIKEY, domain: DOMAIN });
-
   const { email } = req.body;
   models.User.findOne({ where: { email } }).then((emailFound) => {
     if (!emailFound) {
@@ -108,22 +99,14 @@ const forgetPassword = (req, res) => {
       emailFound.email,
       emailFound.busId
     );
-    const dataActivation = {
-      from: 'noreply@phantom.com',
-      to: email,
-      subject: 'Forget password',
-      html:
-      `<h2>
-      please click on given link to reset your account link will expire in 1`
-      + ` hour
-      </h2>
-      <p>${process.env.CLIENT_URL}/reset-password/${token}</p>`
+    const data = {
+      ...emailFound.dataValues,
+      url: `${process.env.CLIENT_URL}/reset-password/${token}`,
     };
-    mg.messages().send(dataActivation, () => {
-      res.status(200).send({
-        status: 200,
-        message: 'check your email',
-      });
+    sendTemplatedMail('forgotPassword', [data]);
+    return res.status(200).json({
+      status: 200,
+      message: 'Email sent, Please check your inbox',
     });
   });
 };
