@@ -139,7 +139,7 @@ const getAllUsers = (req, res) => {
       const userInfo = lodash.map(
         allusers,
         lodash.partialRight(lodash.pick, [
-          '_id',
+          'id',
           'email',
           'role',
           'busId',
