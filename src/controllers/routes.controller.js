@@ -34,6 +34,7 @@ export const addRoute = async (req, res) => {
       );
     }
     const checkDuplicate = () => {
+      // file deepcode ignore LoopDOS: <please specify a reason of ignoring this>: To be refactored
       for (let i = 0; i < rt.busStops.length; i += 1) {
         for (let j = i + 1; j < rt.busStops.length; j += 1) {
           if (rt.busStops[i] == rt.busStops[j]) {

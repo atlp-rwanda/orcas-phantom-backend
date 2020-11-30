@@ -4,6 +4,7 @@ module.exports = {
     [
       {
         email: 'gunner@gmail.com',
+        username: 'Backend Admin',
         password:
         '$2a$10$tm.Dab094hsZwhtTgVzOo.GDlTjQpNsjhTBINSUbXWjA7uhNPd2Ae',
         // password is "111111";

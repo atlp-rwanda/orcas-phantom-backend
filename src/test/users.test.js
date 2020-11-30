@@ -17,6 +17,7 @@ describe('Login a user', () => {
       .post('/api/login')
       .send({
         email: 'hn@gmail.com',
+        // file deepcode ignore NoHardcodedPasswords/test: <please specify a reason of ignoring this>
         password: '123456'
       });
     expect(res.statusCode).toEqual(404);
@@ -70,6 +71,7 @@ describe('User Post Endpoints', () => {
       .set('Authorization', token)
       .send({
         email: 'hn@gmail.com',
+        username: 'HNFiston',
         password: '123456',
         role: 'admin',
         busId: 1
@@ -83,6 +85,7 @@ describe('User Post Endpoints', () => {
       .set('Authorization', token)
       .send({
         email: 'habimana@gmail.com',
+        username: 'habimana',
         password: '123456',
         role: 'admin',
         busId: 1
@@ -131,6 +134,7 @@ describe('Updating users API', () => {
       .set('Authorization', token)
       .send({
         email: 'fils@gmail.com',
+        username: 'FilsHN',
         password: '123456',
         role: 'admin',
         busId: 1
@@ -144,6 +148,7 @@ describe('Updating users API', () => {
       .set('Authorization', token)
       .send({
         email: 'jules@gmail.com',
+        username: 'julesn',
         password: '123456',
         role: 'man',
         busId: 1
@@ -178,10 +183,13 @@ describe('reset password for forgotten password', () => {
   beforeEach(async () => {
     await request(app)
       .post('/api/signup')
+      // file deepcode ignore ContentTypeNoCharset/test: <please specify a reason of ignoring this>: to be refactored
       .set('Accept', 'application/json')
       .set('Authorization', token)
       .send({
+        // file deepcode ignore NoHardcodedCredentials/test: <please specify a reason of ignoring this>: to be refactored
         email: 'fiacregiraneza@gmail.com',
+        username: 'fiacregiraneza',
         password: '123456',
         role: 'admin',
         busId: 1
