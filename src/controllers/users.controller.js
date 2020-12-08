@@ -10,6 +10,7 @@ const signup = (req, res) => {
 
   password = encryptPassword(password);
   const user = {
+    username: req.body.username,
     email: req.body.email,
     password,
     role: req.body.role,
@@ -23,18 +24,31 @@ const signup = (req, res) => {
         message: `The bus with ID ${bid} is not found`,
       });
     }
-    models.User.findOne({ where: { email: req.body.email } }).then(
+    models.User.findOne(
+      { where: { email: req.body.email } }
+    ).then(
       (emailFound) => {
         if (emailFound) {
           return res
             .status(409)
             .json({ status: 409, message: 'Email address already taken' });
         }
+        models.User.findOne(
+          { where: { username: req.body.username } }
+        ).then(
+          (usernameFound) => {
+            if (usernameFound) {
+              return res
+                .status(409)
+                .json({ status: 409, message: 'Username already taken' });
+            }
+          }
+        );
 
         models.User.create(user)
           .then((data) => {
             const userData = {
-              userInfo: lodash.pick(data, 'busId', 'email', 'role'),
+              userInfo: lodash.pick(data, 'busId', 'email', 'role', 'username'),
             };
             res.status(201).json({
               status: 201,
@@ -86,6 +100,7 @@ const login = (req, res) => {
 
 const forgetPassword = (req, res) => {
   const { email } = req.body;
+  // file deepcode ignore PromiseNotCaughtGeneral: <please specify a reason of ignoring this>: to be refactored
   models.User.findOne({ where: { email } }).then((emailFound) => {
     if (!emailFound) {
       return res.status(404).send({
@@ -123,6 +138,7 @@ const getAllUsers = (req, res) => {
         allusers,
         lodash.partialRight(lodash.pick, [
           'id',
+          'username',
           'email',
           'role',
           'busId',
@@ -147,7 +163,9 @@ const getSpecificUser = (req, res) => {
           .status(404)
           .json({ status: 404, message: 'There is no available user!' });
       }
-      const userInfo = lodash.pick(user, 'id', 'busId', 'email', 'role');
+      const userInfo = lodash.pick(
+        user, 'id', 'busId', 'email', 'role', 'username'
+      );
 
       res.status(200).json({ status: 200, userInfo });
     })
@@ -174,6 +192,12 @@ const updateSpecificUser = (req, res) => {
       email = availableUser.email;
     }
 
+    let { username } = req.body;
+
+    if (!username) {
+      username = availableUser.username;
+    }
+
     let { password } = req.body;
 
     if (!password) {
@@ -194,6 +218,7 @@ const updateSpecificUser = (req, res) => {
 
     password = encryptPassword(password);
     const updateUser = {
+      username,
       email,
       password,
       role,
@@ -202,12 +227,23 @@ const updateSpecificUser = (req, res) => {
 
     models.User.findOne({
       where: { email: req.body.email || 'no email' },
-    }).then((emailFound) => {
+    }).then(async (emailFound) => {
       if (emailFound) {
         return res
           .status(409)
           .json({ status: 409, message: 'Email address already taken' });
       }
+      await models.User.findOne(
+        { where: { username: req.body.username } }
+      ).then(
+        (usernameFound) => {
+          if (usernameFound) {
+            return res
+              .status(409)
+              .json({ status: 409, message: 'Username already taken' });
+          }
+        }
+      );
 
       models.User.update(updateUser, {
         where: { id },
