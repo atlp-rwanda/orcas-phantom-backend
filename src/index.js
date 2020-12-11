@@ -17,6 +17,7 @@ app.use('/swaggerDocument', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.get('/', (req, res) => res.status(200).json({
   message: 'Welcome to gunners-phanthom backend site',
 }));
+app.use(cors());
 app.use(express.static('public'));
 app.use('/', busRoutes);
 app.use('/routes', routes);
@@ -29,7 +30,5 @@ app.use((req, res) => {
   error.status = 404;
   res.send({ status: error.status, message: error.message });
 });
-
-app.use(cors());
 
 export default app;

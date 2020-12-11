@@ -3,11 +3,33 @@ import Request from 'request';
 import model from '../database/models';
 
 export const addRoute = async (req, res) => {
+  const getOrgin = await model.busStops.findOne({
+    where: {
+      busStopName: req.body.origin,
+    }
+  });
+  const getDest = await model.busStops.findOne({
+    where: {
+      busStopName: req.body.destination,
+    }
+  });
+  const { Op } = Sequelize;
+  const bss = await model.busStops.findAll({
+    where: {
+      busStopName: { [Op.or]: req.body.busStops }
+    }
+  });
+  const ids = [];
+  bss.forEach((element) => {
+    ids.push(element.id);
+  });
+
   const rt = {
-    originID: req.body.origin,
-    destinationID: req.body.destination,
-    busStops: req.body.busStops
+    originID: getOrgin.id,
+    destinationID: getDest.id,
+    busStops: ids
   };
+  console.log(rt.busStops);
   try {
     const checkOrigin = await model.busStops.findByPk(rt.originID);
     if (!checkOrigin) {
@@ -16,23 +38,23 @@ export const addRoute = async (req, res) => {
       );
     }
     const checkDestination = await model.busStops.findByPk(
-      req.body.destination
+      rt.destinationID
     );
     if (!checkDestination) {
       return res.status(404).json(
         { status: 404, message: 'The Bus stop for destination does not exist' }
       );
     }
-    if (rt.originID != rt.busStops[0]
-      || rt.destinationID != rt.busStops[rt.busStops.length - 1]
-    ) {
-      return res.status(409).json(
-        {
-          status: 409,
-          message: 'Route Origin and destination mismacth their busStop'
-        }
-      );
-    }
+    // if (rt.originID != rt.busStops[0]
+    //   || rt.destinationID != rt.busStops[rt.busStops.length - 1]
+    // ) {
+    //   return res.status(409).json(
+    //     {
+    //       status: 409,
+    //       message: 'Route Origin and destination mismacth their busStop'
+    //     }
+    //   );
+    // }
     const checkDuplicate = () => {
       for (let i = 0; i < rt.busStops.length; i += 1) {
         for (let j = i + 1; j < rt.busStops.length; j += 1) {
@@ -48,7 +70,6 @@ export const addRoute = async (req, res) => {
         { status: 409, message: 'You have entered duplicate bus stops' }
       );
     }
-    const { Op } = Sequelize;
     const result = await model.busStops.count({
       where: {
         id: { [Op.in]: rt.busStops }
@@ -114,7 +135,7 @@ export const getAllRoutes = (req, res) => {
       }
       const allRoutes = route.sort((a, b) => (new Date(b.updatedAt)).getTime()
           - (new Date(a.updatedAt).getTime()));
-      res.status(200).json(allRoutes);
+      res.status(200).send(allRoutes);
     })
     .catch();
 };
@@ -123,7 +144,19 @@ export const getSpecificRoute = (req, res) => {
   model.Route.findByPk(id)
     .then((rt) => {
       if (!rt) return res.status(404).json({ message: 'Route Not found!' });
-      res.status(200).json({ status: 200, rt });
+      model.busStops.findByPk(rt.origkjinID)
+        .then((originbus) => {
+          model.busStops.findByPk(rt.destinationID)
+            .then((destinationbus) => {
+              res.status(200).json({
+                status: 200, rt, originbus, destinationbus
+              });
+            });
+        })
+        .catch((error) => {
+          console.log(error.message);
+        });
+      // console.log(orgi);
     })
     .catch((err) => res.status(500).json({ message: err }));
 };
