@@ -91,7 +91,7 @@ const login = (req, res) => {
 
       res
         .status(200)
-        .json({ status: 200, message: 'login successfull', token });
+        .json({ status: 200, message: 'login successfull', token, role: emailFound.role });
     })
     .catch(() => res.status(500).json({
       status: 500, message: 'server error!'
